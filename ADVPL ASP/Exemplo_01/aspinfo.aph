@@ -1,0 +1,51 @@
+<html><body>
+<pre>
+HTTP HEADER INFO
+<hr>
+<% For nI := 1 to len(HTTPHEADIN->AHEADERS) %>
+<%= HTTPHEADIN->AHEADERS[nI] %>
+<% Next %>
+
+Command .....: <%=HTTPHEADIN->COMMAND%>
+Main ........: <%=HTTPHEADIN->MAIN%>
+CmdParms ....: <%=HTTPHEADIN->CMDPARMS%>
+Remote Addr .: <%=HTTPHEADIN->REMOTE_ADDR%>
+Remote Port .: <%=HTTPHEADIN->REMOTE_PORT%>
+
+<% If len(HTTPCOOKIES->ACOOKIES) > 0 %>
+	COOKIES
+	<hr>
+	<% For nI := 1 to len(HTTPCOOKIES->ACOOKIES) %>
+		<% cVar := HTTPCOOKIES->ACOOKIES[nI] %>
+		<% If !Empty(cVar) %>
+			<%= cVar + " = [" + &("HTTPCOOKIES->"+cVar ) + "]" %>
+		<% Endif %>
+	<% Next %>
+<% Endif %>
+
+<% If len(HTTPGET->AGETS) > 0 %>
+GET PARAMS
+<hr>
+<% For nI := 1 to len(HTTPGET->AGETS) %>
+<% cVar := HTTPGET->AGETS[nI] %>
+<%= cVar + " = [" + &("HTTPGET->"+cVar) + "]" %>
+<% Next %>
+<% EndIf %>
+
+<% If len(HTTPPOST->APOST) > 0 %> 
+POST PARAMS
+<hr>
+<% For nI := 1 to len(HTTPPOST->APOST) %>
+<% cVar := HTTPPOST->APOST[nI] %>
+<%= cVar + " = [" + &("HTTPPOST->"+cVar) + "]" %>
+<% Next %>
+<% EndIf %>
+
+REQUEST DETAILS
+<hr>
+HttpOtherContent() ......: <%=HttpOtherContent()%>
+HttpRCTType() ...........: <%=HttpRCTType()%>
+HttpRCTDisp() ...........: <%=HttpRCTDisp()%>
+HttpRCTLen() ............: <%=HttpRCTLen()%>
+</pre>
+</body></html>
