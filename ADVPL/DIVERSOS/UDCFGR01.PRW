@@ -1,0 +1,111 @@
+#INCLUDE 'TOTVS.CH'
+
+#DEFINE PAD_LEFT	0
+#DEFINE PAD_RIGHT	1
+#DEFINE PAD_CENTER	2
+
+
+/*/{Protheus.doc} UDCFGR01
+UNIVESO DO DESENVOLVEDOR
+TESTE FWMSPRINTER - COLOR
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.07.25
+/*/
+User Function UDCFGR01()
+	Private oPrint		:= Nil
+	Private oProcess	:= Nil
+
+	Private oFont10n	:= TFont():New('Arial',,10,,.T.,,,,,.F.,.F.)	//Negrito/Sublinhado/Italico
+
+	Private nLin			:= 010
+	Private nLinCop			:= 000
+	Private nLinLimite		:= 880				//Limite da folha A4
+	Private nLinHalf		:= nLinLimite/2		//Limite da folha A4
+	Private nColInicio 		:= 000				//Coluna de Inicio
+	Private nColLimite		:= 620				//Tamanho limite de coluna. Tamanho da folha.
+	Private nColHalf		:= nColLimite/2		//Tamanho limite de coluna. Tamanho da folha.
+	Private nSpace          := 002
+	Private nRegs1			:= 0
+
+	Private cPathPDF 	:= 'C:\Temp\'
+	Private cLogo		:= FisxLogo('1')
+	Private cPerg		:= 'UDCFGR01'
+	Private cCRLF		:= CRLF
+	Private cData		:= Dtoc(date())+' - '+cValToChar(Time()) + ' '
+	Private sData		:= Dtos(date())+cValtoChar( Int(Seconds()) )
+	Private cNomeFun	:= FUNNAME()
+
+	Private cArqPDF		:= 'UDESENV_'
+
+
+	oProcess := MsNewProcess():New( { | lEnd | PrintData( @lEnd ) }, 'Exportando', 'Aguarde, exportando ...', .F. )
+	oProcess:Activate()
+
+
+	oPrint:SetViewPDF(.T.)
+	oPrint:Preview()
+
+Return( Nil )
+
+
+/*/{Protheus.doc} PrintData
+Gera as Informações em PDF
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.07.25
+
+@param		@lEnd	, Boolean	, Finaliza Impressão
+/*/
+Static Function PrintData( lEnd )
+	cArqPDF += sData
+
+	If File( cPathPDF + cArqPDF + '.PDF' )
+		fErase( cPathPDF + cArqPDF + '.PDF' )
+	Endif
+
+	oPrint		:= FWMsPrinter():New(cArqPDF,6,.F.,,.T.,,,,,,,.F.)
+
+	//oPrint:SetLandscape()
+	oPrint:SetPortrait()
+	oPrint:SetResolution(78)
+	oPrint:SetPaperSize(9)	// PAPEL A4
+	oPrint:SetMargin(30,30,30,30)
+	oPrint:cPathPDF := cPathPDF
+
+
+	oProcess:SetRegua1( 1 )
+	oProcess:IncRegua1( 'https://udesenv.com.br' )
+
+
+	oPrint:StartPage()
+
+	oPrint:SetPortrait()
+	oPrint:SetResolution(78)
+	oPrint:SetPaperSize(9)	// PAPEL A4
+	oPrint:SetMargin(30,30,30,30)
+
+	PrintCabec()
+
+	oPrint:EndPage()
+
+
+
+Return( Nil )
+
+
+/*/{Protheus.doc} PrintCabec
+Imprimi Cabecalho
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.07.25
+/*/
+Static Function PrintCabec()
+
+	oPrint:Say( nLin, nColInicio+nSpace, 'www.udesenv.com.br', oFont10n,, 1257423 )
+
+Return( Nil )
+

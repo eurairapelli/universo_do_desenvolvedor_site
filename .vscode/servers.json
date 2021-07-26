@@ -6,8 +6,52 @@
 	"permissions": {
 		"authorizationtoken": ""
 	},
-	"connectedServer": {},
-	"configurations": [],
-	"savedTokens": [],
-	"lastConnectedServer": ""
+	"connectedServer": {
+		"id": "of4grynlc2ekrjsvnudg27pb3iv6g",
+		"type": "totvs_server_protheus",
+		"name": "P12.1.25 LOCAL",
+		"port": 1234,
+		"address": "localhost",
+		"buildVersion": "7.00.191205P",
+		"secure": false,
+		"includes": [
+			"C:\\Protheus12_1.25\\include"
+		],
+		"environments": [
+			"UDESENV_12_1_25"
+		],
+		"username": "admin",
+		"environment": "UDESENV_12_1_25",
+		"token": "djM6b2Y0Z3J5bmxjMmVrcmpzdm51ZGcyN3BiM2l2Nmc6MTpsb2NhbGhvc3Q6MTIzNDowOjcuMDAuMTkxMjA1UDoz:djE6VURFU0VOVl8xMl8xXzI1OmFkbWluOnpqRkswcGx5aW9BZTU5K2dlbXo4MHRPaXFoUitoZ0FwNWppeU1veVJ2RlE9|djI6MTYyNzM0MjA3NjowOjE6MQ==.RGFohAp9YjheXI57KDh7E3z+4qm7d0ebYqloNyevAe55ADvNNnKEofhj3KLIxTUWuHKgR3dZqpoE4w2tFeEHZPWlnTAzXZcpkf1TnHfnoJnn1GoH5EpTx8t2i0JS0StcIwhTbxavFKizhQyLpIIInvXoet11wfaSJWUCopN13TMqu/QT5mhtuCRfaoqbhusjzj3I1mfbwl/YLEwdraUe5mHL6Xu2MhyXEKMcVxJMLTSnvsGzyOgAIzd5l0QikzsI5JrvXGkHXWV2Ty6mQtK4ePSNm71YMcM1lnEHRDM6TD+hPJOZum9IpLhdXpYfHge3s4rfO44bRjISZgrx+SwSuw=="
+	},
+	"configurations": [
+		{
+			"id": "of4grynlc2ekrjsvnudg27pb3iv6g",
+			"type": "totvs_server_protheus",
+			"name": "P12.1.25 LOCAL",
+			"port": 1234,
+			"address": "localhost",
+			"buildVersion": "7.00.191205P",
+			"secure": false,
+			"includes": [
+				"C:\\Protheus12_1.25\\include"
+			],
+			"environments": [
+				"UDESENV_12_1_25"
+			],
+			"username": "admin",
+			"environment": "UDESENV_12_1_25",
+			"token": "djM6b2Y0Z3J5bmxjMmVrcmpzdm51ZGcyN3BiM2l2Nmc6MTpsb2NhbGhvc3Q6MTIzNDowOjcuMDAuMTkxMjA1UDoz:djE6VURFU0VOVl8xMl8xXzI1OmFkbWluOnpqRkswcGx5aW9BZTU5K2dlbXo4MHRPaXFoUitoZ0FwNWppeU1veVJ2RlE9|djI6MTYyNzM0MjA3NjowOjE6MQ==.RGFohAp9YjheXI57KDh7E3z+4qm7d0ebYqloNyevAe55ADvNNnKEofhj3KLIxTUWuHKgR3dZqpoE4w2tFeEHZPWlnTAzXZcpkf1TnHfnoJnn1GoH5EpTx8t2i0JS0StcIwhTbxavFKizhQyLpIIInvXoet11wfaSJWUCopN13TMqu/QT5mhtuCRfaoqbhusjzj3I1mfbwl/YLEwdraUe5mHL6Xu2MhyXEKMcVxJMLTSnvsGzyOgAIzd5l0QikzsI5JrvXGkHXWV2Ty6mQtK4ePSNm71YMcM1lnEHRDM6TD+hPJOZum9IpLhdXpYfHge3s4rfO44bRjISZgrx+SwSuw=="
+		}
+	],
+	"savedTokens": [
+		[
+			"of4grynlc2ekrjsvnudg27pb3iv6g:UDESENV_12_1_25",
+			{
+				"id": "of4grynlc2ekrjsvnudg27pb3iv6g",
+				"token": "djM6b2Y0Z3J5bmxjMmVrcmpzdm51ZGcyN3BiM2l2Nmc6MTpsb2NhbGhvc3Q6MTIzNDowOjcuMDAuMTkxMjA1UDoz:djE6VURFU0VOVl8xMl8xXzI1OmFkbWluOnpqRkswcGx5aW9BZTU5K2dlbXo4MHRPaXFoUitoZ0FwNWppeU1veVJ2RlE9|djI6MTYyNzM0MjA3NjowOjE6MQ==.RGFohAp9YjheXI57KDh7E3z+4qm7d0ebYqloNyevAe55ADvNNnKEofhj3KLIxTUWuHKgR3dZqpoE4w2tFeEHZPWlnTAzXZcpkf1TnHfnoJnn1GoH5EpTx8t2i0JS0StcIwhTbxavFKizhQyLpIIInvXoet11wfaSJWUCopN13TMqu/QT5mhtuCRfaoqbhusjzj3I1mfbwl/YLEwdraUe5mHL6Xu2MhyXEKMcVxJMLTSnvsGzyOgAIzd5l0QikzsI5JrvXGkHXWV2Ty6mQtK4ePSNm71YMcM1lnEHRDM6TD+hPJOZum9IpLhdXpYfHge3s4rfO44bRjISZgrx+SwSuw=="
+			}
+		]
+	],
+	"lastConnectedServer": "of4grynlc2ekrjsvnudg27pb3iv6g"
 }
