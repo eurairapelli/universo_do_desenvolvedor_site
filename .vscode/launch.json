@@ -7,9 +7,92 @@
 			"name": "TOTVS Language Debug",
 			"program": "${command:AskForProgramName}",
 			"cwb": "${workspaceFolder}",
-			"smartclientBin": "C:/totvs/bin/smartclient/smartclient.exe",
+			"smartclientBin": "C:/Protheus12_1.25/bin/smartclient_x64/smartclient.exe",
 			"isMultiSession": true,
 			"enableTableSync": true
 		}
-	]
+	],
+	"lastPrograms": [
+		{
+			"label": "U_MSGNOYES",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertYesNo",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertNoYes",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_MsgRetryCal",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_MSCalculator",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_MsgYesNoTimer",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_MsgNoYesTimer",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertWarning",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertSuccess",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertInfo",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertHelp",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertExitPage",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_FWAlertError",
+			"description": "<nil>"
+		},
+		{
+			"label": "sigamdi",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_UDTOOLS",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_MesAno",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_U",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_UD",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_Help",
+			"description": "<nil>"
+		},
+		{
+			"label": "U_VarInfo",
+			"description": "<nil>"
+		}
+	],
+	"lastProgramExecuted": "U_VarInfo"
 }
