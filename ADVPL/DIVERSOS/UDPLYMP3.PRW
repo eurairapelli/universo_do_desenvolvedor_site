@@ -1,0 +1,281 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDPLYMP3
+Toca pasta de MP3
+
+@author		Eurai Rapelli
+@since 		11/06/2014
+
+@Link		http://tdn.totvs.com.br/display/tec/TMediaPlayer
+
+@example	U_UDPLYMP3()
+@example	U_UDPLYMP3X()
+
+@obs		Os formatos de arquivos homologados para SmartClient HTML são: MP4, MOV, WMV e MP3
+@obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+
+@see		http://www.udesenv.com.br/
+/*/
+User Function UDPLYMP3()
+Local oDlg		:= Nil
+
+Local oMsgBar01	:= Nil 
+Local oMsgItem01:= Nil
+
+Local oPnlLeft	:= Nil
+Local oPnlDown	:= Nil
+Local oPnlTop	:= Nil
+Local oPnlItens	:= Nil
+
+Local nLeft		:= 000
+Local nTopBtn	:= 026 
+Local lShowBar	:= .T. 
+Local lisMute	:= .F. 
+Local nVolume	:= 70
+ 
+
+
+
+
+Private oBrw01		:= Nil
+ 
+ 
+Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.)
+
+Private nPasta		:= 0
+Private nArqs		:= 0
+
+
+Private aMusicas		:= { { '', '', '' } }
+Private aMusica			:= { { '', '', '' } }
+
+Private oBrwAlbuns		:= Nil
+Private aAlbuns			:= { { '' } }
+
+
+
+
+oDlg		:= MSDialog():New( 000,000,700,1000,"Player MP3/WMV",,,.F.,,,,,,.T.,,,.T. )
+
+oMsgBar01	:= TMsgBar():New(oDlg, "Eurai Rapelli", .F.,.F.,.F.,.F.,RGB(116,116,116),,oFont12a,.F.)
+oMsgItem01	:= TMsgItem():New( oMsgBar01,'www.udesenv.com.br', 100,oFont12a,CLR_WHITE,,.T., {|| ShellExecute('OPEN','www.udesenv.com.br','','', 3 ) } )   
+
+oPnlDown	  		:= TPanel():NEW( 000, 000, "", oDlg, , .T., , CLR_BLUE, , 000, 010, .T., .T.)
+oPnlDown:Align		:= CONTROL_ALIGN_BOTTOM
+
+oPnlLeft		:= TPanel():NEW( 000, 000, "", oDlg, , .T., , CLR_BLUE, , 120, 000, .T., .T.)
+oPnlLeft:Align:= CONTROL_ALIGN_LEFT
+
+oBrwAlbuns 			:= TCBrowse():New( 040 , 015, 380, 140,,{'Albuns', ''},{200,001},oPnlLeft,,,,, ,,,,,,,.F.,,.T.,,.F.,,, )
+oBrwAlbuns:SetArray( aAlbuns )
+
+oBrwAlbuns:bSeekChange := {|| aMusica	:= {}, FilterAlb() }
+oBrwAlbuns:bLDblClick	:= {|| oMedia:OpenFile( aMusica[oBrw01:nAt, 3] ) }
+oBrwAlbuns:bLine		:= {|| { aAlbuns[oBrwAlbuns:nAt, 1] } }
+oBrwAlbuns:Align  		:= CONTROL_ALIGN_LEFT
+
+
+
+oPnlTop	  		:= TPanel():NEW( 000,  000, "", oDlg, , .T., , CLR_BLUE, , 000, 035, .T., .T.)
+oPnlTop:Align	:= CONTROL_ALIGN_TOP
+
+oMedia 			:= TMediaPlayer():New(000,nLeft,700,025,oPnlTop,"",nVolume,lShowBar)
+ 
+TButton():New( nTopBtn, nLeft, "Open", oPnlTop,;
+	{|| LoadMus(), oPnlDown:SetText('Albuns: ' + Str(nPasta) + '  || Arquivos: ' + Str(nArqs) ) },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+ 
+TButton():New( nTopBtn, nLeft+=28, "Play", oPnlTop,;
+	{|| oMedia:play() },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+ 
+TButton():New( nTopBtn, nLeft+=28, "Pause", oPnlTop,;
+	{|| oMedia:pause() },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+ 
+TButton():New( nTopBtn, nLeft+=28, "Stop", oPnlTop,;
+	{|| oMedia:stop() },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+          
+TButton():New( nTopBtn, nLeft+=28, "SetVolume", oPnlTop,;
+	{|| oMedia:setVolume( Val( FWInputBox("Escolha a altura do volume [0-100]", cValToChar(oMedia:nVolume)) ) ) },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+          
+TButton():New( nTopBtn, nLeft+=28, "GetVolume", oPnlTop,;
+	{|| MsgAlert( oMedia:nVolume ) },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+          
+TButton():New( nTopBtn, nLeft+=28, "lShowBar", oPnlTop,;
+	{|| lShowBar := !lShowBar, oMedia:setShowBar( lShowBar ) },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+          
+TButton():New( nTopBtn, nLeft+=28, "nPlayCount", oPnlTop,;
+	{|| oMedia:nPlayCount := ( Val( FWInputBox("Escolha o numero de repetições", cValToChar(oMedia:nPlayCount)) ) ) },;
+	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+          
+TButton():New( nTopBtn, nLeft+=28, "SetMute", oPnlTop,;
+	{|| lisMute:=!lisMute, oMedia:setMute( lisMute ) },;
+        28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
+
+
+oPnlItens		:= TPanel():NEW( 000, 000, "", oDlg, , .T., , CLR_BLUE, , 000, 000, .T., .T.)
+oPnlItens:Align	:= CONTROL_ALIGN_ALLCLIENT
+
+
+oBrw01 			:= TCBrowse():New( 040 , 015, 380, 140,,{'Pasta', 'Nome Arquivo', 'Caminho', ''},{200,200,200,001},oPnlItens,,,,, ,,,,,,,.F.,,.T.,,.F.,,, )
+oBrw01:SetArray( aMusica )
+oBrw01:bLDblClick	:= {|| oMedia:OpenFile( aMusica[oBrw01:nAt, 3] ) }
+oBrw01:bLine		:= {|| { aMusica[oBrw01:nAt, 1], aMusica[oBrw01:nAt, 2], aMusica[oBrw01:nAt, 3] } }
+oBrw01:Align  		:= CONTROL_ALIGN_ALLCLIENT
+
+
+
+oDlg:Activate(,,,.T.)     
+
+
+      
+Return( Nil )
+
+
+/*/{Protheus.doc} LoadMus
+Seleciona Diretório para carregar Músicas
+
+@author		Eurai Rapelli
+@since 		10/03/2015
+
+@Example	LoadMus()
+
+@OBS		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+
+@See		http://www.udesenv.com.br/
+/*/
+Static Function LoadMus()
+Local cPasta := ''
+
+cPasta := AllTrim(cGetFile("Diretório/Pasta","Selecione o diretório", 0,'', .T., GETF_LOCALHARD + GETF_RETDIRECTORY))
+
+If cPasta <> ''
+
+	aAlbuns			:= {}
+	aMusicas		:= {}
+	aMusica			:= {}
+	GetFiles( cPasta )
+
+	oBrwAlbuns:SetArray( aAlbuns ) 
+	oBrwAlbuns:bLine		:= {|| { aAlbuns[oBrwAlbuns:nAt, 1] } }
+	oBrwAlbuns:Refresh()
+	
+	oBrwAlbuns:GoPosition( 1 )
+
+	FilterAlb()
+	
+
+Endif
+
+
+Return( Nil )
+
+/*/{Protheus.doc} GetFiles
+Carrega as musicas
+
+@author		Eurai Rapelli
+@since 		10.03.2015
+
+@param		cPasta	, Caracter	, Pasta selecionada
+
+@Example	GetFiles( cPasta )
+
+@OBS		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+
+@See		http://www.udesenv.com.br/
+/*/
+Static Function GetFiles( cPasta )
+Local cAlbum	:= ''
+Local nX		:= 1
+Local nTamArray	:= 1
+Local aDiretorio:= {}
+
+/*aDiretorio
+aDiretorio[nX,1] := Nome
+aDiretorio[nX,2] := Permissao
+aDiretorio[nX,3] := Data
+aDiretorio[nX,4] := Hora
+aDiretorio[nX,5] := Tipo
+*/
+cDirPerf 	:= MsDocRmvBar( AllTrim( cPasta) )
+aDiretorio 	:= Directory(cPasta+"\*.*", "D")
+
+For nX := 1 to Len( aDiretorio )
+
+	If Left(aDiretorio[nX,1],1) <> '.'
+	
+		cAlbum := StrTran(SubStr( cPasta, RAt( '\', SubStr( cPasta, 1, Len( cPasta )-1)), Len( cPasta ) ), "\", "" )
+	
+		If Upper( aDiretorio[ nX, 5 ] ) == "D"
+			aAdd( aAlbuns, { aDiretorio[ nX,1 ] } )
+			cAlbum :=  aDiretorio[ nX,1 ]
+			GetFiles( cPasta + '\' + aDiretorio[ nX,1 ], aMusicas )
+			nPasta++
+		ElseIf Upper( aDiretorio[ nX,5 ] ) == "A" .AND. ".MP3" $ Upper( aDiretorio[ nX,1 ] )
+	   		//aAdd( aMusicas, { SubStr( cPasta, RAt( '\', cPasta )+1, Len( cPasta ) ), aDiretorio[ nX,1 ], cPasta + "\" + aDiretorio[ nX,1 ] } )
+	   		aAdd( aMusicas, { cAlbum, aDiretorio[ nX,1 ], cPasta + "\" + aDiretorio[ nX,1 ] } )
+			nArqs++
+		ElseIf Upper( aDiretorio[ nX,5 ] ) == "A" .AND. ".WMV" $ Upper( aDiretorio[ nX,1 ] )
+	   		//aAdd( aMusicas, { SubStr( cPasta, RAt( '\', cPasta )+1, Len( cPasta ) ), aDiretorio[ nX,1 ], cPasta + "\" + aDiretorio[ nX,1 ] } )
+	   		aAdd( aMusicas, { cAlbum, aDiretorio[ nX,1 ], cPasta + "\" + aDiretorio[ nX,1 ] } )
+			nArqs++
+		Endif
+		
+	Endif
+	
+Next nX
+
+If Len(aAlbuns)==0
+	aAdd( aAlbuns, { cAlbum } )
+	nPasta++
+Endif
+
+Return( aMusicas )
+
+
+/*/{Protheus.doc} FilterAlb
+Filtra Album
+
+@author		Eurai Rapelli
+@since 		10/03/2015
+
+@OBS		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+
+@See		http://www.udesenv.com.br/
+/*/
+Static Function FilterAlb()
+Local nI			:= 1
+Local nTamArray1	:= Len( aMusicas )
+
+Local bError 	:= ErrorBlock( { |e| Alert( cCRLF + e:ErrorStack ), Break(e) } )
+
+Begin Sequence
+
+For nI := 1 to nTamArray1
+
+	If AllTrim( aMusicas[nI, 01] ) == AllTrim( aAlbuns[oBrwAlbuns:nAt, 01] )
+	
+		aAdd( aMusica, { aMusicas[nI,01], aMusicas[nI,02], aMusicas[nI,03] } )
+		
+	Endif
+
+Next nI
+
+End Sequence
+
+ErrorBlock(bError)
+
+If nTamArray1 == 0
+	aMusica	:= { { '', '', '' } }
+Endif
+
+oBrw01:SetArray( aMusica ) 
+oBrw01:bLine		:= {|| { aMusica[oBrw01:nAt, 1], aMusica[oBrw01:nAt, 2], aMusica[oBrw01:nAt, 3] } }
+oBrw01:Refresh()
+
+Return( Nil )

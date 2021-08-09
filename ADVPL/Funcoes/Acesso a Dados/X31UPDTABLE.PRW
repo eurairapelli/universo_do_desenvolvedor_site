@@ -1,0 +1,7 @@
+#INCLUDE "TOTVS.CH"
+
+User Function X31UPDTABLE()
+
+X31UPDTABLE('SB1')
+
+Return( Nil )

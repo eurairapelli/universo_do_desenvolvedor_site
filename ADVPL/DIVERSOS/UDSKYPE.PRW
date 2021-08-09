@@ -1,0 +1,45 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDSKYPE
+Comando Skype
+
+@author		Eurai Rapelli
+@since 		12/04/2015
+/*/
+User Function UDSKYPE()
+Local oDlg		:= Nil
+
+Local oLigar 	:= Nil
+Local oChat		:= Nil
+Local oFechar	:= Nil
+
+
+Local oPnlItens	:= Nil
+
+
+Local oSay01	:= Nil
+Local oGet01	:= Nil
+Local cGet01	:= Space(100)
+
+
+Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.)
+
+
+oDlg		:= MSDialog():New( 000,000,250,400,"Skype",,,.F.,,,,,,.T.,,,.T. )
+
+
+oPnlItens		:= TPanel():NEW( 000, 000, "", oDlg, , .T., , CLR_BLUE, , 000, 000, .T., .T.)
+oPnlItens:Align	:= CONTROL_ALIGN_ALLCLIENT
+
+oSay01 	:= TSay():New( 010,005,{|| "Nome User:" },oPnlItens,,,.F.,.F.,.F.,.T.,,,550,008)
+oGet01 	:= TGet():New( 010,050,bSETGET(cGet01),oPnlItens,100,010,"",,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+
+oLigar 	:= TButton():New( 030, 050, "Ligar"			, oPnlItens, { || ShellExecute( "Open", "skype:"+AllTrim(cGet01)+"?call", "NULL", "C:\", 1 ) }, 040, 030, , , .F., .T., .F., , .F., , , .F. )
+oChat	:= TButton():New( 030, 100, "Chat"			, oPnlItens, {|| ShellExecute( "Open", "skype:"+AllTrim(cGet01)+"?chat", "NULL", "C:\", 1 ) }, 040, 030, , , .F., .T., .F., , .F., , , .F. )
+oFechar	:= TButton():New( 070, 075, "Fechar"		, oPnlItens, {|| oDlg:End() }, 040, 030, , , .F., .T., .F., , .F., , , .F. )
+
+
+
+oDlg:Activate(,,,.T.)  
+
+Return( Nil )

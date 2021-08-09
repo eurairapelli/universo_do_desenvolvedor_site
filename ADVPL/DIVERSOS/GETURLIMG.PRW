@@ -3,17 +3,17 @@
 /*/{Protheus.doc} GETURLIMG
 Salva imagem por URL
  
-@author Eurai Rapelli
-@since 06/05/2015
+@author     Eurai Rapelli
+@since      06/05/2015
  
-@Param cUrl , Caracter , Endereço HTTP
-@Return cCaminho , Caracter , Local onde foi armazenado arquivo
+@param      cUrl , Caracter , Endereço HTTP
+@return     cCaminho , Caracter , Local onde foi armazenado arquivo
  
-@Example U_GetUrlImg( 'http://www.universoadvpl.com/wp-content/uploads/2015/04/01.-Curso-MVC-513x630.jpg' )
+@example    U_GetUrlImg( 'https://udesenv.com.br/assets/images/universo-desenvolvedor-logo-320.webp' )
  
-@See http://www.universoadvpl.com/
+@see        http://www.udesenv.com.br
  
-@OBS Conteudo pode ser utilizado desde que respeite as referencias do autor.
+@obs        Conteudo pode ser utilizado desde que respeite as referencias do autor.
 /*/
 User Function GETURLIMG( cUrl )
 Local cHtml := ''
@@ -22,7 +22,7 @@ Local cPath    := '\'
  
  
  
-Default cUrl := 'http://www.universoadvpl.com/wp-content/uploads/2015/04/05.-Curso-MVC-1030x781.jpg'
+Default cUrl := 'https://udesenv.com.br/media/uploads/202107/advpl_vscode.png'
  
  
 cHtml := HttpGet( cUrl )

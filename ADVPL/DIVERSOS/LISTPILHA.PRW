@@ -5,9 +5,9 @@ Lista pilha de chamada no console
 @author		Eurai Rapelli
 @since 		22.05.2012
 
-@OBS		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+@obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
 
-@See		http://www.universoadvpl.com/
+@see		http://www.universoadvpl.com/
 /*/
 User Function ListPilha()
 Local n := 1
@@ -18,6 +18,7 @@ EndDo
 
 Return( Nil )
 
+
 /*/{Protheus.doc} ProcPilha
 Procura na pilha função
 
@@ -26,9 +27,9 @@ Procura na pilha função
 
 @return		lRet	, Boolean	, Retorno
 
-@OBS		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
+@obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
 
-@See		http://www.universoadvpl.com/
+@see		http://www.universoadvpl.com/
 /*/
 User Function ProcPilha( cFuncao )
 Local nI	:= 0
@@ -38,7 +39,7 @@ Local cRot	:= Upper( AllTrim( ProcName( nI ) ) )
 cFuncao := Upper( AllTrim( cFuncao ) )
 
 Do While !Empty(cRot)
-
+	
 	If cFuncao $ cRot
 		lRet := .T.
 		Exit

@@ -92,7 +92,112 @@
 		{
 			"label": "U_VarInfo",
 			"description": "<nil>"
+		},
+		{
+			"args": [],
+			"label": "U_FINLDCB",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_Random",
+			"description": ""
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "U_FWAlertSuccess",
+			"description": " < nil >"
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "U_FWAlertInfo",
+			"description": " < nil >"
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "U_FWAlertExitPage",
+			"description": " < nil >"
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "U_FWAlertYesNo",
+			"description": " < nil >"
+		},
+		{
+			"args": [],
+			"label": "U_GetEndPoint",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_GetCodePage",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_GetLinesProg",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_GetPowerSC",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UUIDRandom",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UUIDRandomSeq",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_GETURLIMG",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_ProcPilha",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDSETKEY",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDPLYMP3",
+			"description": ""
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "U_UDTOOLS",
+			"description": " < nil >"
 		}
 	],
-	"lastProgramExecuted": "U_VarInfo"
+	"lastProgramExecuted": "U_UDTOOLS"
 }
