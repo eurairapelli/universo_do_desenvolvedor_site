@@ -1,6 +1,6 @@
 #INCLUDE "TOTVS.CH"
 
-/*/{Protheus.doc} UDPLYMP3
+/*/{Protheus.doc} UDPLAYERMUSIC
 Toca pasta de MP3
 
 @author		Eurai Rapelli
@@ -8,15 +8,14 @@ Toca pasta de MP3
 
 @Link		http://tdn.totvs.com.br/display/tec/TMediaPlayer
 
-@example	U_UDPLYMP3()
-@example	U_UDPLYMP3X()
+@example	U_UDPLAYERMUSIC()
 
 @obs		Os formatos de arquivos homologados para SmartClient HTML são: MP4, MOV, WMV e MP3
 @obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
 
 @see		http://www.udesenv.com.br/
 /*/
-User Function UDPLYMP3()
+User Function UDPLAYERMUSIC()
 Local oDlg		:= Nil
 
 Local oMsgBar01	:= Nil 
@@ -75,7 +74,6 @@ oBrwAlbuns:bLine		:= {|| { aAlbuns[oBrwAlbuns:nAt, 1] } }
 oBrwAlbuns:Align  		:= CONTROL_ALIGN_LEFT
 
 
-
 oPnlTop	  		:= TPanel():NEW( 000,  000, "", oDlg, , .T., , CLR_BLUE, , 000, 035, .T., .T.)
 oPnlTop:Align	:= CONTROL_ALIGN_TOP
 
@@ -102,7 +100,7 @@ TButton():New( nTopBtn, nLeft+=28, "SetVolume", oPnlTop,;
 	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
           
 TButton():New( nTopBtn, nLeft+=28, "GetVolume", oPnlTop,;
-	{|| MsgAlert( oMedia:nVolume ) },;
+	{|| MsgAlert( oMedia:nVolume, 'Universo do desenvolvedor' ) },;
 	28,010,,,.F.,.T.,.F.,,.F.,,,.F. )
           
 TButton():New( nTopBtn, nLeft+=28, "lShowBar", oPnlTop,;
@@ -205,7 +203,8 @@ aDiretorio[nX,5] := Tipo
 cDirPerf 	:= MsDocRmvBar( AllTrim( cPasta) )
 aDiretorio 	:= Directory(cPasta+"\*.*", "D")
 
-For nX := 1 to Len( aDiretorio )
+nTamArray	:= Len( aDiretorio )
+For nX := 1 to nTamArray
 
 	If Left(aDiretorio[nX,1],1) <> '.'
 	
@@ -214,7 +213,7 @@ For nX := 1 to Len( aDiretorio )
 		If Upper( aDiretorio[ nX, 5 ] ) == "D"
 			aAdd( aAlbuns, { aDiretorio[ nX,1 ] } )
 			cAlbum :=  aDiretorio[ nX,1 ]
-			GetFiles( cPasta + '\' + aDiretorio[ nX,1 ], aMusicas )
+			GetFiles( cPasta + '\' + aDiretorio[ nX,1 ] )
 			nPasta++
 		ElseIf Upper( aDiretorio[ nX,5 ] ) == "A" .AND. ".MP3" $ Upper( aDiretorio[ nX,1 ] )
 	   		//aAdd( aMusicas, { SubStr( cPasta, RAt( '\', cPasta )+1, Len( cPasta ) ), aDiretorio[ nX,1 ], cPasta + "\" + aDiretorio[ nX,1 ] } )

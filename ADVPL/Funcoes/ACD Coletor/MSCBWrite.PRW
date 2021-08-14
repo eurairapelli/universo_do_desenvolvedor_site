@@ -1,0 +1,7 @@
+#INCLUDE "TOTVS.CH"
+
+User Function MSCBWrite()
+
+MSCBWrite("^FXUNIVERSO DO DESENVOLVEDOR ^FS")
+
+Return( Nil )

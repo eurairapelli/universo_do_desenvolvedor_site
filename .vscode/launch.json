@@ -197,6 +197,41 @@
 			],
 			"label": "U_UDTOOLS",
 			"description": " < nil >"
+		},
+		{
+			"args": [],
+			"label": "U_PILHAEXISTE",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_PILHALISTAR",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDPILHALISTAR",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDSKYPE",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDGETIMAGEBYURL",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDMENUNOGRIDPOPPUP",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDCREATEPDFEXAMPLE",
+			"description": ""
 		}
 	],
 	"lastProgramExecuted": "U_UDTOOLS"

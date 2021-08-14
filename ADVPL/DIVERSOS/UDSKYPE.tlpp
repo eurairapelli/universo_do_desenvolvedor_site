@@ -7,19 +7,19 @@ Comando Skype
 @since 		12/04/2015
 /*/
 User Function UDSKYPE()
-Local oDlg		:= Nil
+Local oDlg		:= Nil as object
 
-Local oLigar 	:= Nil
-Local oChat		:= Nil
-Local oFechar	:= Nil
-
-
-Local oPnlItens	:= Nil
+Local oLigar 	:= Nil as object
+Local oChat		:= Nil as object
+Local oFechar	:= Nil as object
 
 
-Local oSay01	:= Nil
-Local oGet01	:= Nil
-Local cGet01	:= Space(100)
+Local oPnlItens	:= Nil as object
+
+
+Local oSay01	:= Nil as object
+Local oGet01	:= Nil as object
+Local cGet01	:= Space(100) as character
 
 
 Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.)

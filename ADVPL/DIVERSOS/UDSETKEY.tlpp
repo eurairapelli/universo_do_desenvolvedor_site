@@ -1,5 +1,6 @@
 #INCLUDE "TOTVS.CH"
 
+
 /*/{Protheus.doc} UDSETKEY
 SetKey Personalizado
 
@@ -7,20 +8,15 @@ SetKey Personalizado
 @since 		25/03/2015
 
 @example	U_UDSETKEY()
-
-@see		http://www.Universo do Desenvolvedor.com/
-
-@obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
 /*/
 User Function UDSETKEY()
-Local oDlg		:= Nil
+Local oDlg		:= Nil as object
 
-Local oMsgBar01	:= Nil 
-Local oMsgItem01:= Nil
+Local oMsgBar01	:= Nil as object
+Local oMsgItem01:= Nil as object
 
-Local oPnlItens	:= Nil
 
-Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.)
+Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.) as object
 
 
 oDlg		:= MSDialog():New( 000,000,200,300,"Atalhos com SetKey",,,.F.,,,,,,.T.,,,.T. )

@@ -1,6 +1,6 @@
 #INCLUDE "TOTVS.CH"
 
-/*/{Protheus.doc} GETURLIMG
+/*/{Protheus.doc} UDGETIMAGEBYURL
 Salva imagem por URL
  
 @author     Eurai Rapelli
@@ -9,20 +9,19 @@ Salva imagem por URL
 @param      cUrl , Caracter , Endereço HTTP
 @return     cCaminho , Caracter , Local onde foi armazenado arquivo
  
-@example    U_GetUrlImg( 'https://udesenv.com.br/assets/images/universo-desenvolvedor-logo-320.webp' )
+@example    U_UDGETIMAGEBYURL( 'https://udesenv.com.br/assets/images/universo-desenvolvedor-logo-320.webp' )
  
-@see        http://www.udesenv.com.br
+@see        https://www.udesenv.com.br
  
 @obs        Conteudo pode ser utilizado desde que respeite as referencias do autor.
 /*/
-User Function GETURLIMG( cUrl )
-Local cHtml := ''
-Local cCaminho := ''
-Local cPath    := '\'
+User Function UDGETIMAGEBYURL( cUrl )
+Local cHtml := '' as character
+Local cCaminho := '' as character
+Local cPath    := '\' as character
  
  
- 
-Default cUrl := 'https://udesenv.com.br/media/uploads/202107/advpl_vscode.png'
+Default cUrl := 'https://udesenv.com.br/media/uploads/202107/advpl_vscode.png' 
  
  
 cHtml := HttpGet( cUrl )

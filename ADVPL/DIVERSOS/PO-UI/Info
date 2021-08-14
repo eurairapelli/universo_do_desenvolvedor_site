@@ -1,0 +1,7 @@
+Instalar:                                                           npm i -g @angular/cli@^12
+Instalar:                                                           yarn global add @angular/cli@^12 (não funcionou no yarn)
+Adicionar na variavel de ambiente (Se o comando ng der inválido)    %appdata%\npm
+Criar:                                                              ng new udesenv01
+Criar (não instalará as dependências automaticamente):              ng new udesenv01 --skip-install 
+Adiconando o pacote:                                                ng add @po-ui/ng-components (dentro do seu projeto)
+Rodar:                                                              ng serve

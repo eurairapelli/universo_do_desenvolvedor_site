@@ -1,30 +1,31 @@
 #INCLUDE "TOTVS.CH"
 
-/*/{Protheus.doc} UDMENUPP
+
+/*/{Protheus.doc} UDMENUNOGRIDPOPPUP
 Menu POP
 
 @type		function
 @author		Eurai Rapelli
 @since 		2021.08.07
 /*/
-User Function UDMENUPP()
-Local oDlg		:= Nil
-Local oBar01	:= Nil 
-Local oBtnBmp01	:= Nil   
-Local oMsgBar01	:= Nil 
-Local oMsgItem01:= Nil   
+User Function UDMENUNOGRIDPOPPUP()
+Local oDlg		:= Nil as object
+Local oBar01	:= Nil as object
+Local oBtnBmp01	:= Nil as object
+Local oMsgBar01	:= Nil as object
+Local oMsgItem01:= Nil as object
 
 
-Private oBrowse		:= Nil
-Private oPnlItens	:= Nil
-Private aBrowse		:= {{Space(255),Space(255)}}
+Private oBrowse		:= Nil  as object
+Private oPnlItens	:= Nil  as object
+Private aBrowse		:= {{Space(255),Space(255)}} as array
 
-Private nForeCor	:= CLR_GRAY
-Private nBackCor	:= CLR_WHITE
+Private nForeCor	:= CLR_GRAY as numeric
+Private nBackCor	:= CLR_WHITE as numeric
 
-Private nCols  		:= 2
+Private nCols  		:= 2 as numeric
 
-Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.)
+Private oFont12a	:= TFont():New("Arial",12,12,,.F.,,,,.T.,.F.) as object
 
 oDlg		:= MSDialog():New( 000,000,500,1000,"Universo do Desenvolvedor - Exemplo de Menu POP",,,.F.,,,,,,.T.,,,.T. )
 oDlg:lMaximized	:= .T.
@@ -63,11 +64,11 @@ Monta Menu, chama na tela
 @Example	MenuPop()
 /*/
 Static Function MenuPop(o,x,y)                               
-Local oMenuItem	:= {}
+Local aMenuItem	:= {} as array
 
 MENU oMenu POPUP
 
-aAdd( oMenuItem, MenuAddItem("Adiciona XXXXX"		,,, .T.,,,, oMenu,{ || Alert('funcao de XXXXX') },,,,,{|| .T.} ) )
+aAdd( aMenuItem, MenuAddItem("Adiciona XXXXX"		,,, .T.,,,, oMenu,{ || Alert('funcao de XXXXX') },,,,,{|| .T.} ) )
 
 ENDMENU
 

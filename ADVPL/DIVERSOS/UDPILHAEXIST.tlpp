@@ -1,25 +1,5 @@
 
-/*/{Protheus.doc} ListPilha
-Lista pilha de chamada no console
-
-@author		Eurai Rapelli
-@since 		22.05.2012
-
-@obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
-
-@see		http://www.universoadvpl.com/
-/*/
-User Function ListPilha()
-Local n := 1
-
-Do While !Empty( ProcName( n ) )
-	Conout( AllTrim( ProcName( n++ ) ) )
-EndDo
-
-Return( Nil )
-
-
-/*/{Protheus.doc} ProcPilha
+/*/{Protheus.doc} PILHAEXISTE
 Procura na pilha função
 
 @author		Eurai Rapelli
@@ -29,9 +9,9 @@ Procura na pilha função
 
 @obs		Conteúdo pode ser utilizado desde que respeite as referencias do autor.
 
-@see		http://www.universoadvpl.com/
+@see		https://www.udesenv.com.br
 /*/
-User Function ProcPilha( cFuncao )
+User Function UDPILHAEXIST( cFuncao )
 Local nI	:= 0
 Local lRet	:=.F.
 Local cRot	:= Upper( AllTrim( ProcName( nI ) ) )

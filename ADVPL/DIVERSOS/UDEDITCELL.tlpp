@@ -1,0 +1,56 @@
+#INCLUDE "TOTVS.CH"
+
+
+
+
+Static Function lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems)
+	Local oDlg      := Nil
+	Local oRect     := tRect():New(0,0,0,0)            // obtem as coordenadas da celula (lugar onde
+	Local oGet1     := Nil
+	Local oBtn      := Nil
+
+	Local oOwner    := oBrowse:oWnd
+	Local nRow      := oBrowse:nAt
+
+	Local cMacro    := "M->CELL"+StrZero(nRow,6)
+	Local lCargo    := .F.
+	Local nLastKey  := 0
+	Local aDim      := {}
+
+	DEFAULT cPict     := ''
+	DEFAULT nCol      := oBrowse:nColPos
+	DEFAULT lReadOnly := .F.
+	DEFAULT bValid    := {|| .T.}
+
+	oBrowse:GetCellRect(nCol,,oRect)   // a janela de edicao deve ficar)
+	aDim  : = {oRect:nTop,oRect:nLeft,oRect:nBottom,oRect:nRight}
+
+	DEFINE MSDIALOG oDlg OF oOwner  FROM 0, 0 TO 0, 0 STYLE nOR( WS_VISIBLE, WS_POPUP ) PIXEL
+
+	&cMacro:= aCampos[nRow,nCol]
+
+	If ValType(aItems) == "A"
+		oGet1 := TComboBox():New(0,0,bSetGet(&(cMacro)),aItems,0,0,oDlg,,,{|| lCargo := Eval(bValid)},,,.T.,oOwner:oFont,,.F.,,.F.,,)
+	Else
+		oGet1 := TGet():New(0,0,bSetGet(&(cMacro)),oDlg,0,0,cPict,{|| lCargo := Eval(bValid)},,,oOwner:oFont,,,.T.,,,,,,,lReadOnly,,cF3,,,,,,.T.)
+	EndIf
+	oGet1:Move(-2,-2, (aDim[ 4 ] - aDim[ 2 ]) + 4, aDim[ 3 ] - aDim[ 1 ] + 4 )
+
+
+	@ 0, 0 BUTTON oBtn PROMPT "ze" SIZE 0,0 OF oDlg
+	oBtn:bGotFocus  := {|| nLastKey := oDlg:nLastKey := VK_RETURN, oDlg:End(0)}
+
+	oGet1:cReadVar  := cMacro
+
+	ACTIVATE MSDIALOG oDlg ON INIT oDlg:Move(aDim[1],aDim[2],aDim[4]-aDim[2], aDim[3]-aDim[1])
+
+	If lCargo
+		aCampos[nRow,nCol]        := &cMacro
+		oBrowse:aArray[nRow,nCol] := &cMacro
+		oBrowse:nAt             := nRow
+		SetFocus(oBrowse:hWnd)
+		oBrowse:Refresh()
+	EndIf
+
+Return( nLastKey <> 0 )
+

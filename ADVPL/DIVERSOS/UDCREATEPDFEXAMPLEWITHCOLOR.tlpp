@@ -4,16 +4,17 @@
 #DEFINE PAD_RIGHT	1
 #DEFINE PAD_CENTER	2
 
-
-/*/{Protheus.doc} UDCFGR01
+/*/{Protheus.doc} UDCREATEPDFEXAMPLEWITHCOLOR
 UNIVESO DO DESENVOLVEDOR
 TESTE FWMSPRINTER - COLOR
 
 @type		function
 @author		Eurai Rapelli
 @since 		2021.07.25
+
+@obs		Exemplo de novo de função. Maior no tlpp
 /*/
-User Function UDCFGR01()
+User Function UDCREATEPDFEXAMPLEWITHCOLOR()
 	Private oPrint		:= Nil
 	Private oProcess	:= Nil
 
