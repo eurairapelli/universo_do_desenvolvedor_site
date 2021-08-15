@@ -1,0 +1,8 @@
+#INCLUDE "TOTVS.CH"
+
+User Function RetSqlCond()
+
+MsgInfo( "RetSqlCond: " + RetSqlCond('SA1'), 'Universo do Desenvolvedor' )
+MsgInfo( "RetSqlCond: " + RetSqlCond('SA1,SB1,SC1,SC5'), 'Universo do Desenvolvedor' )
+
+Return( Nil )

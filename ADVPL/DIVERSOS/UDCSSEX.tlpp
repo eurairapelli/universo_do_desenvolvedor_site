@@ -1,0 +1,107 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDCSSEX
+Seta CSS
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.15
+/*/
+User Function UDCSSEX()
+	Local oDlg		   	 	:= Nil AS Object
+	Local oGet01	   	 	:= Nil AS Object
+	Local oGet02	   	 	:= Nil AS Object
+	Local cGet01		   	:= Space(10) as character
+	Local oButton01		   	:= Nil AS Object
+	Local oButton02		   	:= Nil AS Object
+	Local oCombo01		   	:= Nil AS Object
+	Local cCombo01			:= 'S' AS character
+
+	Local cLibQt		   	:= '' as character
+
+
+	GetRemoteType(@cLibQt)
+
+	oDlg		        := MSDialog():New( 000,000,520,830,'CSS - ' + cLibQt,,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+	oGet01 := TGet():New( 010, 010,bSETGET(cGet01),oDlg,080,020,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+	oGet01:SetCSS( getCSS('TGET_01') )
+
+	oGet02 := TGet():New( 040, 010,bSETGET(cGet01),oDlg,080,020,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+	oGet02:SetCSS( getCSS('TGET_01') )
+	oGet02:Disable()
+
+
+	oButton01 := TButton():New( 070, 010, 'BOTAO'			, oDlg, {|| Alert('BOTAO') }, 080, 020, , , .F., .T., .F., , .F., , , .F. )
+	oButton01:SetCSS( getCSS('TBUTTON_01') )
+
+	oButton02 := TButton():New( 100, 010, 'BOTAO'			, oDlg, {|| Alert('BOTAO') }, 080, 020, , , .F., .T., .F., , .F., , , .F. )
+	oButton02:SetCSS( getCSS('TBUTTON_02') )
+
+	
+	oCombo01	:= TComboBox():New( 130,010,{|u|if(PCount()>0,cCombo01:=u,cCombo01)},{'S=SIM','N=NAO','C=CCC','D=DDD'},080,020,oDlg,,,,CLR_BLACK,CLR_WHITE,.T.,,'',,,,,,, )
+	oCombo01:SetCSS( getCSS('TCOMBO_01') )
+
+
+	oDlg:Activate(,,,.T.)
+
+Return( Nil )
+
+
+/*/{Protheus.doc} getCSS
+Retorna CSS
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.15
+/*/
+Static Function getCSS( cClass )
+	Local cCSS      := '' as character
+
+	Default cClass    := ''
+
+	If cClass == 'TBUTTON_01'
+		cCSS 	+= "QPushButton { color: white }"
+		cCSS 	+= "QPushButton { font-weight: bolder }"
+		cCSS 	+= "QPushButton { border: 2px solid #CECECE }"
+		cCSS 	+= "QPushButton { background-color: blue }"
+		cCSS 	+= "QPushButton { border-radius: 8px }"
+		cCSS 	+= "QPushButton:hover { background-color: #434bdf } "
+		cCSS 	+= "QPushButton:hover { border-style: solid } "
+		cCSS 	+= "QPushButton:hover { border-width: 4px }"
+		cCSS 	+= "QPushButton:pressed { background-color: #373fd4 }"
+		cCSS 	+= "QPushButton:focus { background-color: #1c25d7 } "
+		cCSS 	+= "QPushButton:focus { border-style: solid } "
+		cCSS 	+= "QPushButton:focus { border-width: 8px }"
+	ElseIf cClass == 'TBUTTON_02'
+		cCSS 	+= "QPushButton { color: white }"
+		cCSS 	+= "QPushButton { font-weight: bolder }"
+		cCSS 	+= "QPushButton { border: 2px solid #CECECE }"
+		cCSS 	+= "QPushButton { background-color: green }"
+		cCSS 	+= "QPushButton { border-radius: 8px }"
+		cCSS 	+= "QPushButton:hover { background-color: #457432 } "
+		cCSS 	+= "QPushButton:hover { border-style: solid } "
+		cCSS 	+= "QPushButton:hover { border-width: 4px }"
+		cCSS 	+= "QPushButton:pressed { background-color: #355926 }"
+		cCSS 	+= "QPushButton:focus { background-color: #274c19 } "
+		cCSS 	+= "QPushButton:focus { border-style: solid } "
+		cCSS 	+= "QPushButton:focus { border-width: 8px }"
+	ElseIf cClass == 'TGET_01'
+		cCSS 	+= "QLineEdit { border-radius: 8px }"
+		cCSS 	+= "QLineEdit { border: 1px solid #CECECE } "
+		cCSS 	+= "QLineEdit { background-color: #fff } "
+		cCSS 	+= "QLineEdit:disabled{ background-color: #D7E3F0 }"
+	ElseIf cClass == 'TCOMBO_01'
+		cCSS 	:= "QComboBox { font: bold } "
+		cCSS 	:= "QComboBox { border-radius: 8px } "
+		cCSS 	+= "QComboBox { border: 2px solid #CECECE } "
+		cCSS 	+= "QComboBox { background-color: green } "
+		cCSS 	+= "QComboBox { color: white } "
+		cCSS 	+= "QComboBox:hover { background-color: #6fcd4a } "
+		cCSS 	+= "QComboBox:!editable:on { background-color: #52c923 }"
+		cCSS 	+= "QComboBox QListView{ font: bold; color: white; background-color: #52c923; }"
+		cCSS 	+= "QComboBox QAbstractItemView{  selection-background-color:red; }"
+	Endif
+
+Return( cCSS )

@@ -1,0 +1,12 @@
+#INCLUDE "TOTVS.CH"
+
+User Function RetSx3Box()
+Local cCampo	:= 'A1_PESSOA '
+
+dbSelectArea('SX3')
+SX3->( dbSetOrder(2) )
+SX3->( dbSeek( cCampo ) )
+
+MsgInfo( VarInfo( 'RetSx3Box: ', RetSx3Box( X3CBox(),,, 1 ), , .F. ), 'Univerdo do Desenvolvedor' )
+
+Return( Nil )

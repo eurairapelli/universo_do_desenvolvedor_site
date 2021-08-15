@@ -1,21 +1,85 @@
 #INCLUDE "TOTVS.CH"
 
+/*/{Protheus.doc} UDEDITCELL
+UDEDITCELL
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.14
+
+@see		https://udesenv.com.br
+/*/
+User Function UDEDITCELL()
+	Local oDlg		   	 := Nil AS Object
+
+
+	Private oBrw01        := Nil AS Object
+	Private aBrw01        := {} AS array
+
+
+	aAdd( aBrw01, { Space(06), Date(), 0, 'S' } )
+
+	oDlg		        := MSDialog():New( 000,000,520,830,'Teste EDItCELL',,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+
+	oBrw01 					:= TCBrowse():New( 040 , 015, 380, 140,,,,oDlg,,,,, ,,,,,,,.F.,,.T.,,.F.,,, )
+	oBrw01:SetArray( aBrw01 )
+	oBrw01:bLDblClick	:= {|| setEditCell(oBrw01, aBrw01) }
+	oBrw01:Align  		:= CONTROL_ALIGN_ALLCLIENT
+	oBrw01:AddColumn( TCColumn():New('Cliente' 	,{ || aBrw01[oBrw01:nAt,01] }   	, "@!"			,,,"LEFT"	,060,.F.,.F.,,,,.F.,) )
+	oBrw01:AddColumn( TCColumn():New('Entrega' 	,{ || aBrw01[oBrw01:nAt,02] }   	, "@!"			,,,"LEFT"	,060,.F.,.F.,,,,.F.,) )
+	oBrw01:AddColumn( TCColumn():New('Valor' 	,{ || aBrw01[oBrw01:nAt,03] }   	, PesqPict("SF2",'F2_VALBRUT')			,,,"LEFT"	,060,.F.,.F.,,,,.F.,) )
+	oBrw01:AddColumn( TCColumn():New('Combo' 	,{ || aBrw01[oBrw01:nAt,04] }   	, "@!"			,,,"LEFT"	,060,.F.,.F.,,,,.F.,) )
 
 
 
-Static Function lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems)
-	Local oDlg      := Nil
-	Local oRect     := tRect():New(0,0,0,0)            // obtem as coordenadas da celula (lugar onde
-	Local oGet1     := Nil
-	Local oBtn      := Nil
 
-	Local oOwner    := oBrowse:oWnd
-	Local nRow      := oBrowse:nAt
 
-	Local cMacro    := "M->CELL"+StrZero(nRow,6)
-	Local lCargo    := .F.
-	Local nLastKey  := 0
-	Local aDim      := {}
+	oDlg:Activate(,,,.T.)
+
+
+Return( Nil )
+
+
+/*/{Protheus.doc} setEditCell
+setEditCell
+
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Static Function setEditCell( oBrw01, aBrw01 )
+	If oBrw01:nColPos == 01
+		lEditCelluDesenv( aBrw01, oBrw01, "@!" , oBrw01:nColPos, "SA1" )
+	ElseIf oBrw01:nColPos == 02
+		lEditCelluDesenv( aBrw01, oBrw01, "@!" , oBrw01:nColPos )
+	ElseIf oBrw01:nColPos == 03
+		lEditCelluDesenv( aBrw01, oBrw01, PesqPict("SF2",'F2_VALBRUT') , oBrw01:nColPos )
+	ElseIf oBrw01:nColPos == 04
+		lEditCelluDesenv( aBrw01, oBrw01, "@!" , oBrw01:nColPos, , , , {"S=SIM","N=NAO"} )
+	Endif
+Return( Nil )
+
+/*/{Protheus.doc} lEditCelluDesenv
+lEditCell
+
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Static Function lEditCelluDesenv(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems)
+	Local oDlg      := Nil as object
+	Local oRect     := tRect():New(0,0,0,0) as object
+	Local oGet1     := Nil as object
+	Local oBtn      := Nil as object
+
+	Local oOwner    := oBrowse:oWnd as object
+	Local nRow      := oBrowse:nAt as object
+
+	Local cMacro    := "M->CELL"+StrZero(nRow,6) as character
+	Local lCargo    := .F. as logical
+	Local nLastKey  := 00 as numeric
+	Local aDim      := {} as array
+	Local lTransparent	:= .T. as logical
 
 	DEFAULT cPict     := ''
 	DEFAULT nCol      := oBrowse:nColPos
@@ -23,31 +87,38 @@ Static Function lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems
 	DEFAULT bValid    := {|| .T.}
 
 	oBrowse:GetCellRect(nCol,,oRect)   // a janela de edicao deve ficar)
-	aDim  : = {oRect:nTop,oRect:nLeft,oRect:nBottom,oRect:nRight}
+	aDim  := {oRect:nTop,oRect:nLeft,oRect:nBottom,oRect:nRight}
 
-	DEFINE MSDIALOG oDlg OF oOwner  FROM 0, 0 TO 0, 0 STYLE nOR( WS_VISIBLE, WS_POPUP ) PIXEL
 
-	&cMacro:= aCampos[nRow,nCol]
+	oDlg 		:= MSDialog():New(0,0,0,0,'Janela sem borda',,,,nOr(WS_VISIBLE,WS_POPUP),CLR_BLACK,CLR_WHITE,,,.T.,,,,lTransparent)
+	oDlg:nStyle := nOR( DS_MODALFRAME, WS_POPUP, WS_CAPTION, WS_VISIBLE )
 
+
+	&cMacro	:= aCampos[nRow,nCol]
 	If ValType(aItems) == "A"
-		oGet1 := TComboBox():New(0,0,bSetGet(&(cMacro)),aItems,0,0,oDlg,,,{|| lCargo := Eval(bValid)},,,.T.,oOwner:oFont,,.F.,,.F.,,)
+		oGet1 			:= TComboBox():New(0,0,bSetGet(&(cMacro)),aItems,0,0,oDlg,,,,,,.T.,oOwner:oFont,,.F.,,.F.,,)
+		oGet1:bValid 	:= { || lCargo := Eval(bValid) }
 	Else
-		oGet1 := TGet():New(0,0,bSetGet(&(cMacro)),oDlg,0,0,cPict,{|| lCargo := Eval(bValid)},,,oOwner:oFont,,,.T.,,,,,,,lReadOnly,,cF3,,,,,,.T.)
+		oGet1 			:= TGet():New(0,0,bSetGet(&(cMacro)),oDlg,0,0,cPict,,,,oOwner:oFont,,,.T.,,,,,,,,,,,,,,,)
+		oGet1:bValid 	:= { || lCargo := Eval(bValid) }
+		oGet1:cF3  		:= cF3
+		oGet1:lReadOnly := lReadOnly
+		// oGet1:lNoButton := .F.
 	EndIf
-	oGet1:Move(-2,-2, (aDim[ 4 ] - aDim[ 2 ]) + 4, aDim[ 3 ] - aDim[ 1 ] + 4 )
+	oGet1:Move(-2,-2, (aDim[ 4 ] - aDim[ 2 ]) - 12, aDim[ 3 ] - aDim[ 1 ] + 4 )
 
-
-	@ 0, 0 BUTTON oBtn PROMPT "ze" SIZE 0,0 OF oDlg
+	oBtn 			:= TButton():New( 0, 0, 'ud', oDlg, , 0, 0, , , .F., .T., .F., , .F., , , .F. )
 	oBtn:bGotFocus  := {|| nLastKey := oDlg:nLastKey := VK_RETURN, oDlg:End(0)}
-
 	oGet1:cReadVar  := cMacro
 
-	ACTIVATE MSDIALOG oDlg ON INIT oDlg:Move(aDim[1],aDim[2],aDim[4]-aDim[2], aDim[3]-aDim[1])
+
+	oDlg:bInit 		:= { || oDlg:Move(aDim[1],aDim[2],aDim[4]-aDim[2], aDim[3]-aDim[1]) }
+	oDlg:Activate(,,,)
 
 	If lCargo
-		aCampos[nRow,nCol]        := &cMacro
-		oBrowse:aArray[nRow,nCol] := &cMacro
-		oBrowse:nAt             := nRow
+		aCampos[nRow,nCol]        	:= &cMacro
+		oBrowse:aArray[nRow,nCol] 	:= &cMacro
+		oBrowse:nAt             	:= nRow
 		SetFocus(oBrowse:hWnd)
 		oBrowse:Refresh()
 	EndIf

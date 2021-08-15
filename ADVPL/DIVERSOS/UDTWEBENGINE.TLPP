@@ -1,0 +1,63 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDTWEBENGINE
+UDTWEBENGINE
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.15
+
+@see		https://udesenv.com.br
+/*/
+User Function UDTWEBENGINE()
+	Local oDlg		   	    := Nil AS Object
+	Local oWebEngine	    := Nil AS Object
+	Local cHtml	            := '' AS character
+
+
+	oDlg		        := MSDialog():New( 000,000,520,830,'TWebEngine',,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+	oWebEngine := TWebEngine():New(oDlg, 0, 0, 11, 11, NIL )
+	oWebEngine:Navigate('https://udesenv.com.br')
+	oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
+
+
+	oDlg:Activate(,,,.T.)
+
+
+
+	cHtml += '<!DOCTYPE html>'
+	cHtml += '<html lang="en">'
+	cHtml += '<head>'
+	cHtml += '<meta charset="UTF-8">'
+	cHtml += '<meta http-equiv="X-UA-Compatible" content="IE=edge">'
+	cHtml += '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+	cHtml += '<title>Universo do desenvolvedor</title>'
+	cHtml += '</head>'
+	cHtml += '<body>'
+
+	cHtml += '<div style="width:100%;background-color:#CCC;height:100vh;border-radius:8px;">'
+	cHtml += '  <h1 onclick="clickH1()" style="font-size:30px;color:blue;"> Universo do desenvolvedor </h1>'
+	cHtml += '</div>'
+
+	cHtml += '<script type="text/javascript">'
+	cHtml += 'const clickH1 = () => {'
+	cHtml += '	alert("OI");'
+	cHtml += '}'
+	cHtml += '</script>'
+	cHtml += '</body>'
+	cHtml += '</html>'
+
+	oDlg		        := MSDialog():New( 000,000,520,830,'TWebEngine',,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+	oWebEngine := TWebEngine():New(oDlg, 0, 0, 11, 11, NIL )
+	oWebEngine:setHtml(cHtml, '/')
+	oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
+
+
+	oDlg:Activate(,,,.T.)
+
+
+Return( Nil )

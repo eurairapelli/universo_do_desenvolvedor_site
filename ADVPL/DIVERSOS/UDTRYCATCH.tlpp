@@ -1,0 +1,29 @@
+/*/{Protheus.doc} UDTRYCATCH
+Application Server 20.3.0.0
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.15
+/*/
+User Function UDTRYCATCH()
+
+	TRY
+		oError := ErrorClass():New()
+
+		conout('try')
+		nVar := 1
+		uDesenv()
+		If nVar == '1'
+
+		Endif
+
+	CATCH oError
+		conout("entrou no catch")
+		ConOut( oError:description )
+		ConOut( oError:genCode )
+
+		FINALLY
+		conout('FINALLY')
+	ENDTRY
+
+Return( Nil )

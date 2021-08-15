@@ -1,0 +1,9 @@
+#INCLUDE "TOTVS.CH"
+
+
+//????
+User Function FWCSSVerify()
+Local oButton := TButton():New( 008, 390, 'BOTAO'			, , {|| alert('Universo do Desenvolvedor') }, 017, 012, , , .F., .T., .F., , .F., , , .F. )
+MsgInfo( "FWCSSVerify: " + cValtoChar(FWCSSVerify(GetClassName(oButton), "Q3Frame", 'background-color: transparent;')), 'Universo do Desenvolvedor' )
+
+Return( Nil )

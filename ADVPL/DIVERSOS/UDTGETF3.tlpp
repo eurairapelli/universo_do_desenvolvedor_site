@@ -1,0 +1,30 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDTGETF3
+UDTGETF3
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.14
+
+@see		https://udesenv.com.br
+/*/
+User Function UDTGETF3()
+	Local oDlg		   	 := Nil AS Object
+	Local oGet		   	 := Nil AS Object
+	Local cGet		   	 := '' AS character
+
+
+	oDlg		        := MSDialog():New( 000,000,520,830,'Demonstração f3 tooltip',,,.F.,,,,,,.T.,,,.T. )
+
+	oGet 			:= TGet():New( 008,070,bSETGET(cGet),oDlg,040,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+	oGet:cTooltip 	:= 'TOOLTIP'
+	oGet:cF3 		:= 'SA1'
+	oGet:bHelp		:= {|| ShowHelpCpo( 'Ajuda', {' MINHA AJUDA '}, 0 ) }
+
+
+	oDlg:Activate(,,,.T.)
+
+
+Return( Nil )
+

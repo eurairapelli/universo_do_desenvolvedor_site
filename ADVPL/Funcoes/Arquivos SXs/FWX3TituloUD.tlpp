@@ -1,0 +1,8 @@
+#INCLUDE "TOTVS.CH"
+
+User Function FWX3TituloUD()
+Local cCampo	:= 'A1_PESSOA' as character
+
+MsgInfo( 'Valor: ' + cCampo + CRLF + 'Retorno: ' + FWX3Titulo(cCampo), 'Universo do Desenvolvedor' )
+
+Return( Nil )

@@ -1,0 +1,97 @@
+#INCLUDE "TOTVS.CH"
+
+
+User Function UDCLASSTLPP()
+oUDCLASSTLPP := UDCLASSTLPP():New()
+
+UDCLASSTLPP():updateStatic()
+oUDCLASSTLPP:Alert( 'Minha Mensagem' )
+// oUDCLASSTLPP:updateLogGR() //Erro, pois é private
+
+
+
+Return(Nil)
+
+/*/{Protheus.doc} UDCLASSTLPP
+Classe generica. Funções para usos diversos..
+
+@type		class
+@author		Eurai Rapelli
+/*/
+	Class UDCLASSTLPP
+
+
+		Public Method New() Constructor
+
+		Public Method Alert( cMen, cTit )
+
+		private Method updateLogGR()
+		protected Method updateTable()
+		static Method updateStatic()
+
+
+	EndClass
+
+/*/{Protheus.doc} New
+Metodo New
+
+@type		method
+@author		Eurai Rapelli
+/*/
+Method New() Class UDCLASSTLPP
+Return( Self )
+
+/*/{Protheus.doc} Alert
+Mostra mensagem
+
+@type		method
+@author		Eurai Rapelli
+/*/
+Method Alert( cMen, cTit ) Class UDCLASSTLPP
+	Default cMen        := ''
+	Default cTit        := 'Universo do Desenvoledor'
+
+	::updateLogGR()
+	::updateTable()
+	MsgAlert(cMen,cTit)
+
+Return( Nil )
+
+/*/{Protheus.doc} updateLogGR
+Atualiza logs
+
+@type		method
+@author		Eurai Rapelli
+/*/
+Method updateLogGR() Class UDCLASSTLPP
+
+conout('atualizando loggr')
+
+Return( Nil )
+
+
+/*/{Protheus.doc} updateTable
+Atualiza logs
+
+@type		method
+@author		Eurai Rapelli
+/*/
+Method updateTable() Class UDCLASSTLPP
+
+conout('atualizando updateTable')
+
+Return( Nil )
+
+
+/*/{Protheus.doc} updateTable
+Atualiza logs
+
+@type		method
+@author		Eurai Rapelli
+/*/
+Method updateStatic() Class UDCLASSTLPP
+
+conout('atualizando static logs')
+
+Return( Nil )
+

@@ -232,7 +232,71 @@
 			"args": [],
 			"label": "U_UDCREATEPDFEXAMPLE",
 			"description": ""
+		},
+		{
+			"args": [
+				" <",
+				"nil",
+				">"
+			],
+			"label": "sigamdi",
+			"description": " < nil >"
+		},
+		{
+			"args": [],
+			"label": "U_UDTGETF3",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDCLASS",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDCLASSTLPP",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDTRYCATCH",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_FWX2Unico",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_MPDocPath",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_FwLibVersion",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDCSSEX",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_FWIsMobile",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_FWCSSVerify",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDTWEBENGINE",
+			"description": ""
 		}
 	],
-	"lastProgramExecuted": "U_UDTOOLS"
+	"lastProgramExecuted": "U_UDTWEBENGINE"
 }

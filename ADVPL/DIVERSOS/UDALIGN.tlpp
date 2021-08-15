@@ -1,0 +1,39 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} UDALIGN
+Alinhamento de Objeto no ADVPL
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.14
+
+@see		https://udesenv.com.br
+/*/
+User Function UDALIGN()
+	// CONTROL_ALIGN_TOP		== CIMA
+	// CONTROL_ALIGN_BOTTOM	  	== BAIXO
+	// CONTROL_ALIGN_RIGHT		== ESQUERDA
+	// CONTROL_ALIGN_LEFT		== DIREITA
+	// CONTROL_ALIGN_ALLCLIENT	== COMPLETA / TUDO
+
+	//Exemplo
+	oDlg:Align	:= CONTROL_ALIGN_ALLCLIENT
+
+
+	oPnlToP	  		:= TPanel():NEW( 000,  000, '', oDlg, , .T., , CLR_BLUE, , 000, 035, .T., .T.)
+	oPnlTop:Align	:= CONTROL_ALIGN_TOP
+
+	oPnlDown	  		:= TPanel():NEW( 000, 000, '', oDlg, , .T., , CLR_BLUE, , 000, 035, .T., .T.)
+	oPnlDown:Align	:= CONTROL_ALIGN_BOTTOM
+
+	oPnlLeft		:= TPanel():NEW( 000, 000, '', oDlg, , .T., , CLR_BLUE, , 250, 000, .T., .T.)
+	oPnlLeft:Align	:= CONTROL_ALIGN_LEFT
+
+	oPnlRight		:= TPanel():NEW( 000, 000, '', oDlg, , .T., , CLR_BLUE, , 250, 000, .T., .T.)
+	oPnlRight:Align	:= CONTROL_ALIGN_RIGHT
+
+	oPnlAll			:= TPanel():NEW( 000, 000, '', oDlg, , .T., , CLR_BLUE, , 250, 000, .T., .T.)
+	oPnlAll:Align	:= CONTROL_ALIGN_ALLCLIENT
+
+Return( Nil )
+

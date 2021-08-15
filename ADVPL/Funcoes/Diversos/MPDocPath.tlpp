@@ -1,0 +1,8 @@
+#INCLUDE "TOTVS.CH"
+
+User Function MPDocPath()
+
+MsgInfo( MPDocPath(.F.), 'Universo do Desenvolvedor' )
+MsgInfo( MPDocPath(.T.), 'Universo do Desenvolvedor' )
+
+Return( Nil )
