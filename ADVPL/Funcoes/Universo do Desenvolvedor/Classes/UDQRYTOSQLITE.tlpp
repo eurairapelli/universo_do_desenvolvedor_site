@@ -1,0 +1,206 @@
+#INCLUDE "TOTVS.CH"
+
+
+/*/{Protheus.doc} UDQryToSQLite
+Função de TESTE
+24 segundo para selecionar 17078 registros com 287 coluna e copiar para sqlite 
+>> Beta test
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+User Function UDQryToSQLite()
+	Local oUDQryToSQLite   := UDQryToSQLite():New() as object
+	Local cQuery        	:= '' as character
+	Local cTime         	:= Time() as character
+	Local oWriter       	:= FWFileWriter():New( 'C:\Temp\UDQryToSQLite_' + Dtos(Date()) + '_' + StrTran(Time(),':','') + '.TXT', .F.) as object
+	Local cCRLF         	:= CRLF as character
+
+	cQuery := "SELECT *FROM " + RetSQLName('SA1') + " WHERE D_E_L_E_T_ = ''"
+	If !oWriter:Create()
+		MsgInfo('Erro ao criar o arquivo de escrita: ' + oWriter:Error():Message,'UDQryToSQLite')
+		Return( Nil )
+	Endif
+	If !oUDQryToSQLite:Execute( cQuery, 'UDEURAI' )
+		MsgInfo('Problema ao criar e abrir o arquivo temporário em SQLite: ' + oUDQryToSQLite:GetError(),'UDQryToSQLite')
+		Return( Nil )
+	Endif
+	oWriter:Write('Tempo total: ' + ElapTime( cTime, Time() ) + cCRLF )
+	Do While UDEURAI->( !EOF() )
+
+		If !oWriter:Write('Nome: ' + UDEURAI->A1_NOME + cCRLF )
+			MsgInfo('Problema ao escrever: ' + oWriter:Error():Message,'UDQryToSQLite')
+			Return( Nil )
+		Endif
+
+		UDEURAI->( dbSkip() )
+	EndDo
+	oWriter:Write('Tempo total: ' + ElapTime( cTime, Time() ) + cCRLF )
+
+	If !oUDQryToSQLite:Close()
+		MsgInfo('Problema ao fechar o arquivo SQLite: ' + oUDQryToSQLite:GetError(),'UDQryToSQLite')
+		Return( Nil )
+	Endif
+	oWriter:Close()
+
+
+Return( Nil )
+
+
+/*/{Protheus.doc} UDQryToSQLite
+Classe de Progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+	Class UDQryToSQLite
+
+		Public data cAliasName as character
+		Public data cAliasSQLite as character
+		Private data cError as character
+
+		Public Method New() Constructor
+
+		Public Method Execute( cQuery, cTmp )
+
+		Public Method Count(nReg,cSQL)
+		Public Method Close()
+
+		Public Method GetError()
+		Public Method GetRealName()
+
+
+
+
+	EndClass
+
+/*/{Protheus.doc} New
+Instancia da classe
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method New() Class UDQryToSQLite
+	::cError	:= ''
+Return( Self )
+
+/*/{Protheus.doc} Execute
+Executa a copia para o SQLLite
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method Execute( cQuery, cAliasName ) Class UDQryToSQLite
+	Local lRet                  := .T. as logical
+	Local cAliasQuery           := GetNextAlias() as character
+
+	Local lErro 	:= .F. as logical
+	Local bError    := {||} as codeblock
+
+	Default cQuery          := ''
+	Default cAliasName      := GetNextAlias()
+
+	Begin Sequence
+
+
+		If Empty(cQuery)
+			::cError        := "Query envia está vazia."
+			lRet            := .F.; Break
+		Endif
+		::cAliasSQLite      := GetNextAlias()
+		::cAliasName        := cAliasName
+
+
+		If Select(cAliasName) > 0
+			(cAliasName)->( dbCloseArea() )
+		Endif
+		If Select(cAliasQuery) > 0
+			(cAliasQuery)->( dbCloseArea() )
+		Endif
+
+		ErrorBlock( { |UD| cError := UD:ErrorStack, lErro := .T., Break(UD) } )
+		Begin Sequence
+			DbUseArea(.T.,'TOPCONN',TcGenQry(,,ChangeQuery(cQuery)),cAliasQuery,.T.,.T.)
+		End Sequence
+		ErrorBlock(bError)
+		If lErro
+			::cError    := "Query com erro: " + TCSQLERROR()
+			lRet        := .F.; Break
+		Endif
+
+		DBCreate( ::cAliasSQLite, (cAliasQuery)->(dbStruct()), 'SQLITE_SYS' )
+		DBUseArea( .T., 'SQLITE_SYS', ::cAliasSQLite, ::cAliasName, .F., .F. )
+
+		If !DBTblCopy(cAliasQuery, ::cAliasName)
+			::cError    := "Tabela não foi copiada."
+			lRet        := .F.; Break
+		Endif
+		(cAliasQuery)->( dbCloseArea() )
+
+	End Sequence
+
+
+Return( lRet )
+
+/*/{Protheus.doc} Close
+Fecha o arquivo e deleta
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method Close() Class UDQryToSQLite
+	Local lRet  := .T. as logical
+
+	(::cAliasName)->( dbCloseArea() )
+	If !DBSqlExec( ::GetRealName() , "DROP TABLE " + ::GetRealName() , 'SQLITE_SYS')
+		::cError    := "Tabela não foi deletada"
+		lRet        := .F.
+	Endif
+
+Return( lRet )
+
+/*/{Protheus.doc} Count
+Fecha o arquivo e deleta
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method Count(nReg,cSQL) Class UDQryToSQLite
+	Default cSQL	:= "SELECT COUNT(0)QTD FROM " + ::GetRealName()
+
+	If DBSqlExec( 'TMP_COUNT_UD' , cSQL, 'SQLITE_SYS')
+		nReg 		:= TMP_COUNT_UD->QTD
+		TMP_COUNT_UD->( dbCloseArea() )
+		lRet        := .T.
+	Else
+		::cError    := "Erro no count da tabela"
+		lRet        := .F.
+	Endif
+
+Return( lRet )
+
+/*/{Protheus.doc} GetError
+Recupera o erro
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method GetError() Class UDQryToSQLite
+Return( ::cError )
+
+/*/{Protheus.doc} GetRealName
+Recupera o nome real da tabela no SQLLITE
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method GetRealName() Class UDQryToSQLite
+Return( ::cAliasSQLite )

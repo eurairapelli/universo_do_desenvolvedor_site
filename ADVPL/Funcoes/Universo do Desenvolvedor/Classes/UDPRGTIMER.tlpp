@@ -1,0 +1,203 @@
+#INCLUDE "TOTVS.CH"
+
+User Function UDPRGTIMER()
+	Private oUDPRGTIMER	:= UDPRGTIMER():New( {|UD| UDPRGTIMER() }, 'Meu Título' ,'Mensagem', .T. ) as object
+	oUDPRGTIMER:Activate()
+Return( Nil )
+
+Static Function UDPRGTIMER()
+	Local nI := 01 as numeric
+
+	oUDPRGTIMER:SetRegua(100000)
+	For nI := 01 to 100000
+		oUDPRGTIMER:IncRegua('Mensagem: ' + Str(nI) )
+	Next nI
+
+Return( Nil )
+
+/*/{Protheus.doc} UDPRGTIMER
+Classe de Progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+	Class UDPRGTIMER
+
+		Public Data oTimer as object
+		Private Data oMeter as object
+		Private Data oSay01 as object
+		Public Data oDlg as object
+
+		Public Data nMeter as numeric
+		Public Data nSecTimer as numeric
+
+		Public Data cMsg as character
+		Public Data cTitle as character
+
+		Private Data lAbort as logical
+		Public Data lEnd as logical
+
+		Public Data bAction as codeblock
+		Public Data bBlocTimer as codeblock
+
+		Public Method New( bAction, cTitle , cMsg, lAbort ) Constructor
+
+		Public Method Activate()
+
+		Public Method SetRegua(nSet)
+
+		Public Method IncRegua(cMsg)
+
+
+
+
+	EndClass
+
+/*/{Protheus.doc} New
+Classe de Progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method New( bAction, cTitle ,cMsg, lAbort, bBlocTimer, nSecTimer ) Class UDPRGTIMER
+	Default cMsg        := 'Processando'
+	Default cTitle      := 'Aguarde'
+
+	Default nSecTimer   := 2000
+
+	Default lAbort      := .F.
+
+	Default bBlocTimer  := Nil
+	Default bAction     := { || Nil }
+
+
+	::oDlg          := Nil
+
+	::cMsg          := cMsg
+	::cTitle        := cTitle
+
+	::lAbort        := lAbort
+	::lEnd          := .F.
+
+	::nSecTimer     := nSecTimer
+	::nMeter        := 0
+
+	::bBlocTimer    := bBlocTimer
+	::bAction       := bAction
+
+
+
+Return( Self )
+
+/*/{Protheus.doc} New
+Classe de Progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method Activate() Class UDPRGTIMER
+	local cCssTMeter       	:= "" as character
+	local oButton01     	:= Nil as object
+	local oPnlItens01   	:= Nil as object
+	local oSay02   			:= Nil as object
+	Local lTransparent  	:= .F. as logical
+	Local lHtml  			:= .T. as logical
+	Local cTextHtml 		:= '<font size="2" color="blue"><i><b>UD</b></i></font>' as character
+
+	If !IsBlind()
+
+		cCssTMeter := " QProgressBar:horizontal { "
+		cCssTMeter += "    border: 1px solid gray; "
+		cCssTMeter += "    border-radius: 1px; "
+		cCssTMeter += "    background: white; "
+		cCssTMeter += "    padding: 1px; "
+		cCssTMeter += " } "
+		cCssTMeter += " QProgressBar::chunk:horizontal { "
+		cCssTMeter += "    background: qlineargradient(x1: 0, y1: 0.10, x2: 1, y2: 0.15, stop: 0 #6524f9, stop: 1 red ); "
+		// cCssTMeter += " background: qlineargradient(x1: 0, y1: 0.10, x2: 1, y2: 0.15, stop: 0 #7FFF00, stop: 1 green ); "
+		cCssTMeter += " } "
+
+
+
+		::oDlg            	:= MSDialog():New(000,000,160, 330,::cTitle,,,,nOr(WS_VISIBLE,WS_POPUP),CLR_BLACK,CLR_WHITE,,,.T.,,,,lTransparent)
+		oPnlItens01		    := TPanel():NEW( 000, 000, '', ::oDlg, , .T., , CLR_BLUE, , 000, 000, .T., .T.)
+		oPnlItens01:Align	:= CONTROL_ALIGN_ALLCLIENT
+
+
+		::oSay01 	:= TSay():New( 010, 010,{|| ::cMsg },oPnlItens01,,,.F.,.F.,.F.,.T.,,,130,30)
+		::oMeter 	:= TMeter():New( 020, 010, {|| ::nMeter }, 10, oPnlItens01, 150, 030, Nil, .T. )
+		::oMeter:SetCSS( cCssTMeter )
+
+		oButton01 	:= TButton():New( 070, 120, 'Cancelar', oPnlItens01, {|| ::lEnd := .T. }, 040, 020, , , .F., .T., .F., , .F., , , .F. )
+		IF !::lAbort
+			oButton01:Disable()
+		Endif
+
+
+		oSay02 		:= TSay():New(080, 010,{||cTextHtml},oPnlItens01,,,,,,.T.,,,100,100,,,,,,lHtml)
+
+		If ::bBlocTimer != Nil
+			::oTimer    := TTimer():New(::nSecTimer, ::bBlocTimer, ::oDlg )
+			::oTimer:lLiveAny   := .T.
+		Endif
+
+
+		::oDlg:bStart := { || Eval( ::bAction, ::lEnd ), ::lEnd := .T., If(::oTimer != Nil, ::oTimer:DeActivate(), Nil), ::oDlg:End() }
+		::oDlg:bValid := { || ::lEnd }
+		::oDlg:Activate(,,,.T.)
+
+	Else
+		Eval(bAction)
+	EndIf
+
+
+Return( Nil )
+
+/*/{Protheus.doc} SetRegua
+Seta o progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method SetRegua(nSet) Class UDPRGTIMER
+	DEFAULT nSet := 10
+
+	If ::oTimer != Nil
+		::oTimer:Activate()
+	Endif
+	::oMeter:Set(0)
+	::oMeter:SetTotal(nSet)
+	::oMeter:Refresh()
+	SysRefresh()
+
+Return( Nil )
+
+
+/*/{Protheus.doc} IncRegua
+Incrementa progresso
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method IncRegua(cMsg) Class UDPRGTIMER
+
+	If cMsg <> NIL
+		::oSay01:SetText(cMsg)
+		::oSay01:Refresh()
+	EndIf
+	If ::lEnd
+		If ::oTimer != Nil
+			::oTimer:DeActivate()
+		Endif
+		::oDlg:End()
+	EndIf
+	::nMeter++
+	::oMeter:Set(::nMeter)
+	::oMeter:Refresh()
+
+Return( Nil )

@@ -1,0 +1,158 @@
+#INCLUDE "TOTVS.CH"
+
+
+Static cCRLF    := CRLF
+
+User Function UDESENV()
+
+
+
+Return( Nil )
+
+/*/{Protheus.doc} UDESENV
+Classe do univerdo do desenvolvedor
+Genérica, em desenvolvimento
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+	Class UDESENV
+
+
+		Public Method New() Constructor
+
+        Public Method lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems) 
+
+		Public Method GetCallStack()
+		
+        Public Method IsInCallStack( cFunction )
+
+
+
+
+	EndClass
+
+/*/{Protheus.doc} New
+Instancia da Classe
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method New() Class UDESENV
+Return( Self )
+
+
+/*/{Protheus.doc} IsInCallStack
+Verifica se existe a função na stack
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method IsInCallStack(cFunction) Class UDESENV
+	Local nI	:= 0 as numeric
+	Local lRet	:=.F. as logical
+	Local cRot	:= Upper( AllTrim( ProcName( nI ) ) ) as character
+
+	cFunction := Upper( AllTrim( cFunction ) )
+	Do While !Empty(cRot)
+
+		If cFunction $ cRot
+			lRet := .T.
+			Exit
+		Else
+			nI		:= nI + 1
+			cRot	:= Upper( AllTrim( ProcName( nI ) ) )
+		Endif
+
+	EndDo
+Return( lRet )
+
+
+
+/*/{Protheus.doc} GetCallStack
+Retorna a Pilha de Stack
+
+@type		class
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method GetCallStack() Class UDESENV
+	Local n         := 1 as numeric
+	Local cStack    := '' as character]
+
+	Do While !Empty( ProcName( n ) )
+		cStack += AllTrim( ProcName( n++ ) ) + cCRLF
+	EndDo
+
+Return( cStack )
+
+
+
+/*/{Protheus.doc} lEditCell
+Edição de Célula. Utilizado no tcBrowser
+
+@author		Eurai Rapelli
+@since 		2021.08.14
+/*/
+Method lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems) Class UDESENV
+	Local oDlg      := Nil as object
+	Local oRect     := tRect():New(0,0,0,0) as object
+	Local oGet1     := Nil as object
+	Local oBtn      := Nil as object
+
+	Local oOwner    := oBrowse:oWnd as object
+	Local nRow      := oBrowse:nAt as object
+
+	Local cMacro    := "M->CELL"+StrZero(nRow,6) as character
+	Local lCargo    := .F. as logical
+	Local nLastKey  := 00 as numeric
+	Local aDim      := {} as array
+	Local lTransparent	:= .T. as logical
+
+	DEFAULT cPict     := ''
+	DEFAULT nCol      := oBrowse:nColPos
+	DEFAULT lReadOnly := .F.
+	DEFAULT bValid    := {|| .T.}
+
+	oBrowse:GetCellRect(nCol,,oRect)   // a janela de edicao deve ficar)
+	aDim  := {oRect:nTop,oRect:nLeft,oRect:nBottom,oRect:nRight}
+
+
+	oDlg 		:= MSDialog():New(0,0,0,0,'Janela sem borda',,,,nOr(WS_VISIBLE,WS_POPUP),CLR_BLACK,CLR_WHITE,,,.T.,,,,lTransparent)
+	oDlg:nStyle := nOR( DS_MODALFRAME, WS_POPUP, WS_CAPTION, WS_VISIBLE )
+
+
+	&cMacro	:= aCampos[nRow,nCol]
+	If ValType(aItems) == "A"
+		oGet1 			:= TComboBox():New(0,0,bSetGet(&(cMacro)),aItems,0,0,oDlg,,,,,,.T.,oOwner:oFont,,.F.,,.F.,,)
+		oGet1:bValid 	:= { || lCargo := Eval(bValid) }
+	Else
+		oGet1 			:= TGet():New(0,0,bSetGet(&(cMacro)),oDlg,0,0,cPict,,,,oOwner:oFont,,,.T.,,,,,,,,,,,,,,,)
+		oGet1:bValid 	:= { || lCargo := Eval(bValid) }
+		oGet1:cF3  		:= cF3
+		oGet1:lReadOnly := lReadOnly
+		// oGet1:lNoButton := .F.
+	EndIf
+	oGet1:Move(-2,-2, (aDim[ 4 ] - aDim[ 2 ]) - 12, aDim[ 3 ] - aDim[ 1 ] + 4 )
+
+	oBtn 			:= TButton():New( 0, 0, 'ud', oDlg, , 0, 0, , , .F., .T., .F., , .F., , , .F. )
+	oBtn:bGotFocus  := {|| nLastKey := oDlg:nLastKey := VK_RETURN, oDlg:End(0)}
+	oGet1:cReadVar  := cMacro
+
+
+	oDlg:bInit 		:= { || oDlg:Move(aDim[1],aDim[2],aDim[4]-aDim[2], aDim[3]-aDim[1]) }
+	oDlg:Activate(,,,)
+
+	If lCargo
+		aCampos[nRow,nCol]        	:= &cMacro
+		oBrowse:aArray[nRow,nCol] 	:= &cMacro
+		oBrowse:nAt             	:= nRow
+		SetFocus(oBrowse:hWnd)
+		oBrowse:Refresh()
+	EndIf
+
+Return( nLastKey <> 0 )
+
