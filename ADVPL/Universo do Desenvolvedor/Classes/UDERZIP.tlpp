@@ -1,0 +1,215 @@
+#INCLUDE "TOTVS.CH"
+
+
+User Function UDERZip()
+Local oUDERZip	:= UDERZip():New() as object
+Local aArquivos	:= {} as array
+
+oUDERZip:SetFmtZIP( '7Z' )
+oUDERZip:SetPathZipExe( '\' ) //DATA
+oUDERZip:SetPathZipFile( '' )
+
+aAdd( aArquivos, '\advpl_vscode.png' )
+aAdd( aArquivos, '\index.html' )
+If oUDERZip:ZIPArq( aArquivos )
+	FWAlertInfo('Arquivo gerado: ' + oUDERZip:GetFileZip(),'Universo do Desenvolvedor')
+Else
+	FWAlertError(oUDERZip:GetError(),'Universo do Desenvolvedor')
+Endif
+
+
+Return(Nil)
+
+/*/{Protheus.doc} UDERZip
+Compactação de Arquivo
+
+@type		class
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Class UDERZip
+
+	DATA cRootPath as character
+	DATA cStartPath as character
+	DATA cPathZip as character
+	DATA cFileZip as character
+	DATA cErro as character
+	DATA cSwitch as character
+	DATA cFormat as character
+
+	Public Method New() Constructor
+
+	Public Method DeleteZIP( lShowLog )
+
+	Public Method GetError()
+	Public Method GetFileZip()
+
+	Public Method SetFmtZIP( cFormat )
+	Public Method SetPathZipFile( cPathZip )
+	Public Method SetPathZipExe( cStartPath )
+
+	Public Method ZIPArq( aArquivos )
+	
+EndClass
+
+
+/*/{Protheus.doc} New
+Metodo New
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method New() Class UDERZip
+
+::cRootPath 	:= GetPvProfString( GetEnvServer(), 'ROOTPATH', 'NAO DEFINIDO', GetAdv97() )
+::cStartPath 	:= GetPvProfString( GetEnvServer(), 'STARTPATH', 'NAO DEFINIDO', GetAdv97() )
+::cPathZip		:= MsDocPath() 
+::cFileZip		:= ''
+::cErro			:= ''
+::cSwitch		:= '-tzip'
+::cFormat		:= '.ZIP'
+::cCRLF			:= CRLF
+
+Return( Self )
+
+
+/*/{Protheus.doc} DeleteZIP
+Deleta o ZIP gerado
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method DeleteZIP( lShowLog ) Class UDERZip
+Local lRet 	:= .T.
+
+If FErase( ::cFileZip ) == -1
+	::cErro	+= "Erro na eliminação do arquivo nº " + STR( FError() ) + ::cCRLF
+	lRet	:= .F.
+Endif
+
+Return( lRet )
+
+
+/*/{Protheus.doc} GetError
+Retorna erro dos anexos Enviado
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method GetError() Class UDERZip
+Return( ::cErro )
+
+/*/{Protheus.doc} GetFileZip
+Retorna nome do arquivo Zipado
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method GetFileZip() Class UDERZip
+Return( ::cFileZip )
+
+
+/*/{Protheus.doc} SetPathZipFile
+Retorna nome do arquivo Zipado
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method SetPathZipFile( cPathZip ) Class UDERZip
+::cPathZip := cPathZip
+Return( ::cPathZip )
+
+
+/*/{Protheus.doc} SetPathZipExe
+Retorna nome do arquivo Zipado
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method SetPathZipExe( cStartPath ) Class UDERZip
+::cStartPath := cStartPath
+Return( ::cStartPath )
+
+
+
+/*/{Protheus.doc} SetFmtZIP
+Seta formato de Compactação
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method SetFmtZIP( cFormat ) Class UDERZip
+Default cFormat		:= 'ZIP'
+
+cFormat := Upper( AllTrim( cFormat ) )
+
+If cFormat == 'ZIP'
+
+	::cSwitch		:= '-tzip'
+	::cFormat		:= '.ZIP'
+
+ElseIf cFormat == '7Z'
+
+	::cSwitch		:= '-t7z'
+	::cFormat		:= '.7Z'
+
+
+Else
+
+	::cSwitch		:= '-tzip'
+	::cFormat		:= '.ZIP'
+
+Endif
+
+Return( Nil )
+
+
+
+
+/*/{Protheus.doc} ZIPArq
+Anexa Arquivo
+
+@type		method
+@author		Eurai Rapelli
+@since 		2013.12.20
+/*/
+Method ZIPArq( aArquivos ) Class UDERZip
+Local nI			:= 0 as numeric
+Local cCommandLine	:= '' as character
+Local lRet			:= .T. as logical
+
+Default aArquivos	:= {} 
+
+::cFileZip	:= ''
+
+Begin Sequence
+
+If Len( aArquivos ) == 0
+	Break
+Endif
+
+::cErro		:= ''
+::cFileZip 	:= ::cPathZip + '\' + RetFileName( aArquivos[01] ) + ::cFormat
+
+For nI := 1 to Len( aArquivos )
+
+	cCommandLine := ::cRootPath + ::cStartPath + '7z a ' + ::cSwitch + " "
+	cCommandLine += ::cRootPath + ::cFileZip + " "
+	cCommandLine += ::cRootPath + aArquivos[nI]
+	
+	If !( lRet := WaitRunSrv( cCommandLine , .T. , ::cRootPath + '\' ) )
+		::cErro	+= 'Arquivo não anexado: ' + aArquivos[nI] + ::cCRLF
+	Endif
+
+Next nI
+
+End Sequence
+  
+Return( lRet )

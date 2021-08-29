@@ -301,7 +301,37 @@
 			"args": [],
 			"label": "U_UDPRGTIMER",
 			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_UDERZIP",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_CEPBRASILAPI",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_CEPVIACEP",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_CNPJBRASILAPI",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_DDDBRASILAPI",
+			"description": ""
+		},
+		{
+			"args": [],
+			"label": "U_CLIMATEMPO",
+			"description": ""
 		}
 	],
-	"lastProgramExecuted": "U_UDPRGTIMER"
+	"lastProgramExecuted": "U_CLIMATEMPO"
 }

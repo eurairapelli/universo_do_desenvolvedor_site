@@ -3,13 +3,12 @@
 
 Static cCRLF    := CRLF
 
-User Function UDESENV()
-
+User Function UDERESENV()
 
 
 Return( Nil )
 
-/*/{Protheus.doc} UDESENV
+/*/{Protheus.doc} UDERESENV
 Classe do univerdo do desenvolvedor
 Genérica, em desenvolvimento
 
@@ -17,7 +16,7 @@ Genérica, em desenvolvimento
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-	Class UDESENV
+	Class UDERESENV
 
 
 		Public Method New() Constructor
@@ -40,7 +39,7 @@ Instancia da Classe
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method New() Class UDESENV
+Method New() Class UDERESENV
 Return( Self )
 
 
@@ -51,7 +50,7 @@ Verifica se existe a função na stack
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method IsInCallStack(cFunction) Class UDESENV
+Method IsInCallStack(cFunction) Class UDERESENV
 	Local nI	:= 0 as numeric
 	Local lRet	:=.F. as logical
 	Local cRot	:= Upper( AllTrim( ProcName( nI ) ) ) as character
@@ -79,7 +78,7 @@ Retorna a Pilha de Stack
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method GetCallStack() Class UDESENV
+Method GetCallStack() Class UDERESENV
 	Local n         := 1 as numeric
 	Local cStack    := '' as character]
 
@@ -97,7 +96,7 @@ Edição de Célula. Utilizado no tcBrowser
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems) Class UDESENV
+Method lEditCell(aCampos,oBrowse,cPict,nCol,cF3,lReadOnly,bValid,aItems) Class UDERESENV
 	Local oDlg      := Nil as object
 	Local oRect     := tRect():New(0,0,0,0) as object
 	Local oGet1     := Nil as object

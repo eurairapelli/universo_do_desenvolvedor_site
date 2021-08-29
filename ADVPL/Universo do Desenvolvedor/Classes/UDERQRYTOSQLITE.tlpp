@@ -1,7 +1,6 @@
 #INCLUDE "TOTVS.CH"
 
-
-/*/{Protheus.doc} UDQryToSQLite
+/*/{Protheus.doc} UDERQRYTOSQLITE
 Função de TESTE
 24 segundo para selecionar 17078 registros com 287 coluna e copiar para sqlite 
 >> Beta test
@@ -10,27 +9,27 @@ Função de TESTE
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-User Function UDQryToSQLite()
-	Local oUDQryToSQLite   := UDQryToSQLite():New() as object
+User Function UDERQRYTOSQLITE()
+	Local oUDERQRYTOSQLITE   := UDERQRYTOSQLITE():New() as object
 	Local cQuery        	:= '' as character
 	Local cTime         	:= Time() as character
-	Local oWriter       	:= FWFileWriter():New( 'C:\Temp\UDQryToSQLite_' + Dtos(Date()) + '_' + StrTran(Time(),':','') + '.TXT', .F.) as object
+	Local oWriter       	:= FWFileWriter():New( 'C:\Temp\UDERQRYTOSQLITE_' + Dtos(Date()) + '_' + StrTran(Time(),':','') + '.TXT', .F.) as object
 	Local cCRLF         	:= CRLF as character
 
 	cQuery := "SELECT *FROM " + RetSQLName('SA1') + " WHERE D_E_L_E_T_ = ''"
 	If !oWriter:Create()
-		MsgInfo('Erro ao criar o arquivo de escrita: ' + oWriter:Error():Message,'UDQryToSQLite')
+		MsgInfo('Erro ao criar o arquivo de escrita: ' + oWriter:Error():Message,'UDERQRYTOSQLITE')
 		Return( Nil )
 	Endif
-	If !oUDQryToSQLite:Execute( cQuery, 'UDEURAI' )
-		MsgInfo('Problema ao criar e abrir o arquivo temporário em SQLite: ' + oUDQryToSQLite:GetError(),'UDQryToSQLite')
+	If !oUDERQRYTOSQLITE:Execute( cQuery, 'UDEURAI' )
+		MsgInfo('Problema ao criar e abrir o arquivo temporário em SQLite: ' + oUDERQRYTOSQLITE:GetError(),'UDERQRYTOSQLITE')
 		Return( Nil )
 	Endif
 	oWriter:Write('Tempo total: ' + ElapTime( cTime, Time() ) + cCRLF )
 	Do While UDEURAI->( !EOF() )
 
 		If !oWriter:Write('Nome: ' + UDEURAI->A1_NOME + cCRLF )
-			MsgInfo('Problema ao escrever: ' + oWriter:Error():Message,'UDQryToSQLite')
+			MsgInfo('Problema ao escrever: ' + oWriter:Error():Message,'UDERQRYTOSQLITE')
 			Return( Nil )
 		Endif
 
@@ -38,8 +37,8 @@ User Function UDQryToSQLite()
 	EndDo
 	oWriter:Write('Tempo total: ' + ElapTime( cTime, Time() ) + cCRLF )
 
-	If !oUDQryToSQLite:Close()
-		MsgInfo('Problema ao fechar o arquivo SQLite: ' + oUDQryToSQLite:GetError(),'UDQryToSQLite')
+	If !oUDERQRYTOSQLITE:Close()
+		MsgInfo('Problema ao fechar o arquivo SQLite: ' + oUDERQRYTOSQLITE:GetError(),'UDERQRYTOSQLITE')
 		Return( Nil )
 	Endif
 	oWriter:Close()
@@ -48,14 +47,14 @@ User Function UDQryToSQLite()
 Return( Nil )
 
 
-/*/{Protheus.doc} UDQryToSQLite
+/*/{Protheus.doc} UDERQRYTOSQLITE
 Classe de Progresso
 
 @type		class
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-	Class UDQryToSQLite
+	Class UDERQRYTOSQLITE
 
 		Public data cAliasName as character
 		Public data cAliasSQLite as character
@@ -83,7 +82,7 @@ Instancia da classe
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method New() Class UDQryToSQLite
+Method New() Class UDERQRYTOSQLITE
 	::cError	:= ''
 Return( Self )
 
@@ -94,7 +93,7 @@ Executa a copia para o SQLLite
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method Execute( cQuery, cAliasName ) Class UDQryToSQLite
+Method Execute( cQuery, cAliasName ) Class UDERQRYTOSQLITE
 	Local lRet                  := .T. as logical
 	Local cAliasQuery           := GetNextAlias() as character
 
@@ -111,7 +110,7 @@ Method Execute( cQuery, cAliasName ) Class UDQryToSQLite
 			::cError        := "Query envia está vazia."
 			lRet            := .F.; Break
 		Endif
-		::cAliasSQLite      := GetNextAlias()
+		::cAliasSQLite      := 'TMP_' + Dtos(Date()) + '_' + StrTran(Time(),':','') + cValtoChar(Randomize(1,9999)) + FunName()
 		::cAliasName        := cAliasName
 
 
@@ -132,6 +131,7 @@ Method Execute( cQuery, cAliasName ) Class UDQryToSQLite
 			lRet        := .F.; Break
 		Endif
 
+		DBSqlExec( ::cAliasSQLite , "DROP TABLE " + ::cAliasSQLite, 'SQLITE_SYS')
 		DBCreate( ::cAliasSQLite, (cAliasQuery)->(dbStruct()), 'SQLITE_SYS' )
 		DBUseArea( .T., 'SQLITE_SYS', ::cAliasSQLite, ::cAliasName, .F., .F. )
 
@@ -153,7 +153,7 @@ Fecha o arquivo e deleta
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method Close() Class UDQryToSQLite
+Method Close() Class UDERQRYTOSQLITE
 	Local lRet  := .T. as logical
 
 	(::cAliasName)->( dbCloseArea() )
@@ -171,7 +171,7 @@ Fecha o arquivo e deleta
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method Count(nReg,cSQL) Class UDQryToSQLite
+Method Count(nReg,cSQL) Class UDERQRYTOSQLITE
 	Default cSQL	:= "SELECT COUNT(0)QTD FROM " + ::GetRealName()
 
 	If DBSqlExec( 'TMP_COUNT_UD' , cSQL, 'SQLITE_SYS')
@@ -192,7 +192,7 @@ Recupera o erro
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method GetError() Class UDQryToSQLite
+Method GetError() Class UDERQRYTOSQLITE
 Return( ::cError )
 
 /*/{Protheus.doc} GetRealName
@@ -202,5 +202,5 @@ Recupera o nome real da tabela no SQLLITE
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method GetRealName() Class UDQryToSQLite
+Method GetRealName() Class UDERQRYTOSQLITE
 Return( ::cAliasSQLite )

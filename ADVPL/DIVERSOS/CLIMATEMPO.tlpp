@@ -1,0 +1,97 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} CLIMATEMPO
+Consulta de clima 
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.28
+/*/
+User Function CLIMATEMPO()
+	Local oDlg		   	 := Nil AS Object
+	Local oSayXX		  := Nil AS Object
+
+	Private oGet01		 := Nil AS Object
+	Private cGet01		 := Space(40) AS character
+
+	Private oMemo11		 := Nil AS Object
+	Private cMemo01		 := '' AS character
+
+	Private cCRLF 		:= CRLF as character
+
+	Private cChaveAPI	:= 'XXXXXXXXXXXXXXXXXXXXXXXxx' as character
+
+
+
+	oDlg		        := MSDialog():New( 000,000,550,430,'Consulta do Clima',,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+
+	oSayXX 		:= TSay():New( 010,010,{|| 'Cidade:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet01 		:= TGet():New( 010,060,bSETGET(cGet01),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+	oGet01:bValid := {|UniversoDesenvolvedor| bValid() }
+
+	oSayXX 		:= TSay():New( 030,010,{|| 'Temperatura:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oMemo11 	:= TMultiget():New(040,010,{|u|if(Pcount()>0,cMemo01:=UPPER(u),cMemo01)},oDlg,200,200,,.T.,,,,.T.,,,,,,,,,,,.T.)
+	oMemo11:lReadOnly	:= .T.
+
+
+
+
+	oDlg:Activate(,,,.T.)
+
+Return( Nil )
+
+
+/*/{Protheus.doc} bValid
+Validação
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.28
+/*/
+Static Function bValid()
+	Local lRet          := .T. as logical
+	Local aHeader       := {} as array
+	Local cHeaderRet    := '' as character
+	Local cResult       := '' as character
+	Local oResult       := {} as object
+
+
+
+	Begin Sequence
+
+		If Empty(cGet01)
+			MsgInfo('Informe a Cidade','Universo do Desenvolvedor')
+			Break
+		Endif
+
+
+
+		cResult := HTTPQuote('https://api.openweathermap.org/data/2.5/weather?q='+AllTrim(cGet01)+'&appid='+cChaveAPI+'&units=metric&lang=pt_br/', "GET", "", , , aHeader, @cHeaderRet)
+		If !("200 OK" $ cHeaderRet )
+			MsgInfo('Erro na Consulta: ' + cResult,'Universo do Desenvolvedor')
+			Break
+		Endif
+
+		If !FWJsonDeserialize( cResult, @oResult )
+			MsgInfo('Erro no jSon: ' + cResult,'Universo do Desenvolvedor')
+			Break
+		Endif
+
+		cMemo01  := ''
+		cMemo01  += 'Cidade: ' + DecodeUTF8(oResult:name) + cCRLF
+		cMemo01  += 'Pais: ' + DecodeUTF8(oResult:sys:country) + cCRLF
+		cMemo01  += 'Temperatura: ' + cValtoChar(oResult:main:temp) + cCRLF
+		cMemo01  += 'Velocidade do Vento: ' + cValtoChar(oResult:wind:speed) + cCRLF
+		cMemo01  += 'Angulo do Vento: ' + cValtoChar(oResult:wind:deg) + cCRLF
+
+		RECOVER
+
+
+	End Sequence
+
+Return( lRet )
+
+
+

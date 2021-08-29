@@ -1,0 +1,110 @@
+#INCLUDE "TOTVS.CH"
+
+/*/{Protheus.doc} CEPVIACEP
+Consulta de CEP via (VIA CEP)
+https://viacep.com.br/
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.28
+/*/
+User Function CEPVIACEP()
+	Local oDlg		   	 := Nil AS Object
+	Local oSayXX		  := Nil AS Object
+
+	Private oGet01		 := Nil AS Object
+	Private cGet01		 := Space(08) AS character
+
+	Private oGet11		 := Nil AS Object
+	Private cGet11		 := '' AS character
+	Private oGet12		 := Nil AS Object
+	Private cGet12		 := '' AS character
+	Private oGet13		 := Nil AS Object
+	Private cGet13		 := '' AS character
+	Private oGet14		 := Nil AS Object
+	Private cGet14		 := '' AS character
+
+
+
+	oDlg		        := MSDialog():New( 000,000,220,430,'CEP - VIACEP',,,.F.,,,,,,.T.,,,.T. )
+	oDlg:lMaximized     := .T.
+
+
+	oSayXX := TSay():New( 010,010,{|| 'CEP:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet01 := TGet():New( 010,060,bSETGET(cGet01),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+	oGet01:bValid := {|UniversoDesenvolvedor| bValid() }
+
+	oSayXX := TSay():New( 030,010,{|| 'Estado:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet11 := TGet():New( 030,060,bSETGET(cGet11),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+
+	oSayXX := TSay():New( 045,010,{|| 'Cidade:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet12 := TGet():New( 045,060,bSETGET(cGet12),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+
+	oSayXX := TSay():New( 060,010,{|| 'Bairro:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet13 := TGet():New( 060,060,bSETGET(cGet13),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+
+	oSayXX := TSay():New( 075,010,{|| 'Rua:' },oDlg,,,.F.,.F.,.F.,.T.,,,100,008)
+	oGet14 := TGet():New( 075,060,bSETGET(cGet14),oDlg,120,010,,,,/*10*/,,,,.T.,/*15*/,,,,,/*20*/,,)
+
+
+
+
+
+	oDlg:Activate(,,,.T.)
+
+Return( Nil )
+
+
+/*/{Protheus.doc} bValid
+Validação
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.08.28
+/*/
+Static Function bValid()
+	Local lRet          := .T. as logical
+	Local aHeader       := {} as array
+	Local cHeaderRet    := '' as character
+	Local cResult       := '' as character
+	Local oResult       := {} as object
+
+
+
+
+	Begin Sequence
+
+		If Empty(cGet01)
+			MsgInfo('Informe o CEP','Universo do Desenvolvedor')
+			Break
+		Endif
+
+
+
+		cResult := HTTPQuote('https://viacep.com.br/ws/'+AllTrim(cGet01)+'/json/', "GET", "", , , aHeader, @cHeaderRet)
+		If !("200 OK" $ cHeaderRet )
+			MsgInfo('Erro na Consulta: ' + cResult,'Universo do Desenvolvedor')
+			Break
+		Endif
+
+		If !FWJsonDeserialize( cResult, @oResult )
+			MsgInfo('Erro no jSon: ' + cResult,'Universo do Desenvolvedor')
+			Break
+		Endif
+
+
+		cGet11  := DecodeUTF8(oResult:uf)
+		cGet12  := DecodeUTF8(oResult:localidade)
+		cGet13  := DecodeUTF8(oResult:bairro)
+		cGet14  := DecodeUTF8(oResult:logradouro)
+
+
+		RECOVER
+
+
+	End Sequence
+
+Return( lRet )
+
+
+

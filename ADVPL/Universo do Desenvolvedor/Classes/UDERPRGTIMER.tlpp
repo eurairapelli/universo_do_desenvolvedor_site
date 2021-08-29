@@ -1,28 +1,28 @@
 #INCLUDE "TOTVS.CH"
 
-User Function UDPRGTIMER()
-	Private oUDPRGTIMER	:= UDPRGTIMER():New( {|UD| UDPRGTIMER() }, 'Meu Título' ,'Mensagem', .T. ) as object
-	oUDPRGTIMER:Activate()
+User Function UDERPRGTIMER()
+	Private oUDERPRGTIMER	:= UDERPRGTIMER():New( {|UD| UDERPRGTIMER() }, 'Meu Título' ,'Mensagem', .T. ) as object
+	oUDERPRGTIMER:Activate()
 Return( Nil )
 
-Static Function UDPRGTIMER()
+Static Function UDERPRGTIMER()
 	Local nI := 01 as numeric
 
-	oUDPRGTIMER:SetRegua(100000)
+	oUDERPRGTIMER:SetRegua(100000)
 	For nI := 01 to 100000
-		oUDPRGTIMER:IncRegua('Mensagem: ' + Str(nI) )
+		oUDERPRGTIMER:IncRegua('Mensagem: ' + Str(nI) )
 	Next nI
 
 Return( Nil )
 
-/*/{Protheus.doc} UDPRGTIMER
+/*/{Protheus.doc} UDERPRGTIMER
 Classe de Progresso
 
 @type		class
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-	Class UDPRGTIMER
+	Class UDERPRGTIMER
 
 		Public Data oTimer as object
 		Private Data oMeter as object
@@ -61,7 +61,7 @@ Classe de Progresso
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method New( bAction, cTitle ,cMsg, lAbort, bBlocTimer, nSecTimer ) Class UDPRGTIMER
+Method New( bAction, cTitle ,cMsg, lAbort, bBlocTimer, nSecTimer ) Class UDERPRGTIMER
 	Default cMsg        := 'Processando'
 	Default cTitle      := 'Aguarde'
 
@@ -88,7 +88,6 @@ Method New( bAction, cTitle ,cMsg, lAbort, bBlocTimer, nSecTimer ) Class UDPRGTI
 	::bAction       := bAction
 
 
-
 Return( Self )
 
 /*/{Protheus.doc} New
@@ -98,7 +97,7 @@ Classe de Progresso
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method Activate() Class UDPRGTIMER
+Method Activate() Class UDERPRGTIMER
 	local cCssTMeter       	:= "" as character
 	local oButton01     	:= Nil as object
 	local oPnlItens01   	:= Nil as object
@@ -163,7 +162,7 @@ Seta o progresso
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method SetRegua(nSet) Class UDPRGTIMER
+Method SetRegua(nSet) Class UDERPRGTIMER
 	DEFAULT nSet := 10
 
 	If ::oTimer != Nil
@@ -184,7 +183,7 @@ Incrementa progresso
 @author		Eurai Rapelli
 @since 		2021.08.14
 /*/
-Method IncRegua(cMsg) Class UDPRGTIMER
+Method IncRegua(cMsg) Class UDERPRGTIMER
 
 	If cMsg <> NIL
 		::oSay01:SetText(cMsg)
