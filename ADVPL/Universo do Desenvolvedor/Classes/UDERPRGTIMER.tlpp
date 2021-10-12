@@ -136,7 +136,7 @@ Method Activate() Class UDERPRGTIMER
 		Endif
 
 
-		oSay02 		:= TSay():New(080, 010,{||cTextHtml},oPnlItens01,,,,,,.T.,,,100,100,,,,,,lHtml)
+		oSay02 		:= TSay():New(080, 010,{||cTextHtml},oPnlItens01,,,,,,.T.,,,400,300,,,,,,lHtml)
 
 		If ::bBlocTimer != Nil
 			::oTimer    := TTimer():New(::nSecTimer, ::bBlocTimer, ::oDlg )
