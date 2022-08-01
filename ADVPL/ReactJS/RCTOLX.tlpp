@@ -1,0 +1,22 @@
+/*/{Protheus.doc} RCTOLX
+Abrindo portinari
+
+@type		function
+@author		Eurai Rapelli
+@since 		2021.10.12
+/*/
+User Function RCTOLX()
+
+FWCallApp('protheusportinari')
+
+// oDlg            := MSDialog():New( 000,000,520,830,'TWebEngine',,,.F.,,,,,,.T.,,,.T. )
+// oDlg:lMaximized     := .T.
+// oWebEngine := TWebEngine():New(oDlg, 0, 0, 11, 11, NIL )
+// // oWebEngine:Navigate('https://udesenv.com.br')
+// // oWebEngine:Navigate('http://localhost:'+GetProfString('WEBAPP','PORT','8080')+'/olx')
+// oWebEngine:Navigate('C:\Protheus12_1.25\DATA_UDESENV\olx')
+// oWebEngine:Align := CONTROL_ALIGN_ALLCLIENT
+// oDlg:Activate(,,,.T.)
+
+
+Return( Nil )

@@ -7,7 +7,7 @@
 			"name": "TOTVS Language Debug",
 			"program": "${command:AskForProgramName}",
 			"cwb": "${workspaceFolder}",
-			"smartclientBin": "C:/Protheus12_1.25/bin/smartclient_x64/smartclient.exe",
+			"smartclientBin": "E:/Protheus12_1.33/bin/smartclient_x64/smartclient.exe",
 			"isMultiSession": true,
 			"enableTableSync": true
 		}
@@ -335,7 +335,10 @@
 		{
 			"label": "U_FwCutOff",
 			"description": "<nil>"
+		},
+		{
+			"label": "U_FWGetSerie"
 		}
 	],
-	"lastProgramExecuted": "U_FwCutOff"
+	"lastProgramExecuted": "U_FWGetSerie"
 }
